@@ -4,7 +4,7 @@ import { CapabilityCard } from "@/components/blocks/CapabilityCard";
 import { CTABand } from "@/components/blocks/CTABand";
 import { FocusAreaCard } from "@/components/blocks/FocusAreaCard";
 import { HeroCurrentPanel } from "@/components/blocks/HeroCurrentPanel";
-import { PersonCard } from "@/components/blocks/PersonCard";
+import { HomePeopleShowcase } from "@/components/blocks/HomePeopleShowcase";
 import { PressureCard } from "@/components/blocks/PressureCard";
 import { SectionHeader } from "@/components/blocks/SectionHeader";
 import { SectorCard } from "@/components/blocks/SectorCard";
@@ -75,10 +75,7 @@ export default function HomePage() {
       <section className="bg-paper py-24 text-ink-soft lg:py-32">
         <div className="container-eneriq">
           <SectionHeader title={home.peopleTeaser.title} intro={home.peopleTeaser.statement} light />
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {leaders.map((person) => <PersonCard key={person.slug} person={person} light />)}
-          </div>
-          <Link href="/people" className="mt-8 inline-flex font-semibold text-energy">{ui.labels.people}</Link>
+          <HomePeopleShowcase people={leaders} />
         </div>
       </section>
 
