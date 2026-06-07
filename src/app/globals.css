@@ -1,0 +1,175 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@theme inline {
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-sans);
+
+  --color-ink: #0A0F0D;
+  --color-ink-soft: #16201C;
+  --color-paper: #F6F7F4;
+  --color-mist: #F5F7F5;
+  --color-energy: #16A34A;
+  --color-energy-bright: #10B981;
+  --color-cyan: #38BDF8;
+  --color-amber: #D9A441;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+}
+
+:root {
+  --background: #0A0F0D;
+  --foreground: #F5F7F5;
+  --card: #F6F7F4;
+  --card-foreground: #16201C;
+  --popover: #0A0F0D;
+  --popover-foreground: #F5F7F5;
+  --primary: #16A34A;
+  --primary-foreground: #F5F7F5;
+  --secondary: #16201C;
+  --secondary-foreground: #F5F7F5;
+  --muted: rgba(245, 247, 245, 0.12);
+  --muted-foreground: rgba(245, 247, 245, 0.68);
+  --accent: #10B981;
+  --accent-foreground: #0A0F0D;
+  --destructive: #dc2626;
+  --border: rgba(245, 247, 245, 0.12);
+  --input: rgba(245, 247, 245, 0.14);
+  --ring: #10B981;
+  --radius: 0.75rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-ink text-mist font-sans antialiased;
+  }
+
+  ::selection {
+    background: rgba(16, 185, 129, 0.35);
+    color: #F5F7F5;
+  }
+
+  a,
+  button,
+  input,
+  select,
+  textarea {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-energy focus-visible:ring-offset-2 focus-visible:ring-offset-ink;
+    touch-action: manipulation;
+  }
+
+  button,
+  [role="button"],
+  a {
+    @apply cursor-pointer;
+  }
+}
+
+.container-eneriq {
+  @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #16A34A, #10B981, #38BDF8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.current-stroke {
+  background: linear-gradient(135deg, #16A34A, #10B981, #38BDF8);
+}
+
+.glass-surface {
+  @apply border border-white/10 bg-white/5 backdrop-blur-xl;
+}
+
+.premium-panel {
+  @apply border border-white/10 bg-white/[0.055] backdrop-blur-2xl shadow-[0_1.5rem_5rem_rgba(0,0,0,0.24)];
+}
+
+.light-panel {
+  @apply border border-ink-soft/10 bg-white shadow-[0_1.25rem_3.5rem_rgba(10,15,13,0.08)];
+}
+
+.section-rim {
+  @apply relative overflow-hidden;
+}
+
+.section-rim::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(16, 185, 129, 0.12), transparent 34rem),
+    radial-gradient(circle at 85% 20%, rgba(56, 189, 248, 0.09), transparent 30rem);
+  opacity: 0.8;
+}
+
+.cta-lift {
+  @apply min-h-11 transition-[transform,box-shadow,background-color,border-color] duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0;
+}
+
+.motion-stable {
+  backface-visibility: hidden;
+  contain: paint;
+  transform: translateZ(0);
+}
+
+.dark-scrim {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(22, 163, 74, 0.18), transparent 34%),
+    linear-gradient(120deg, rgba(10, 15, 13, 0.92), rgba(10, 15, 13, 0.62) 48%, rgba(10, 15, 13, 0.86));
+}
+
+.grid-current {
+  background-image:
+    linear-gradient(rgba(56, 189, 248, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
