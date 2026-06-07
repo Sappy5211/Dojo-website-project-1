@@ -163,6 +163,59 @@
   background-size: 48px 48px;
 }
 
+.hero-current-orbit::before {
+  content: "";
+  position: absolute;
+  inset: 3rem;
+  border-radius: 9999px;
+  background:
+    conic-gradient(from 90deg, transparent, rgba(22, 163, 74, 0.28), transparent 38%, rgba(56, 189, 248, 0.24), transparent 72%);
+  filter: blur(18px);
+  opacity: 0.82;
+  animation: hero-current-spin 28s linear infinite;
+}
+
+.hero-current-flow-line {
+  stroke-dasharray: 90 520;
+  animation: hero-current-dash 7s ease-in-out infinite;
+}
+
+.hero-current-pulse {
+  animation: hero-current-pulse 3.8s ease-in-out infinite;
+}
+
+@keyframes hero-current-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes hero-current-dash {
+  0%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0.45;
+  }
+
+  50% {
+    stroke-dashoffset: -180;
+    opacity: 0.95;
+  }
+}
+
+@keyframes hero-current-pulse {
+  0%,
+  100% {
+    transform: scale(0.96);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 0.95;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
