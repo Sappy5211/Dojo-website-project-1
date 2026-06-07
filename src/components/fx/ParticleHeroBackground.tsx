@@ -7,11 +7,14 @@ type Particle = {
   x: number;
   y: number;
   originX: number;
-  originY: number;
   vx: number;
   vy: number;
   size: number;
   color: string;
+  alpha: number;
+  phase: number;
+  lift: number;
+  drift: number;
 };
 
 type DustParticle = {
@@ -35,9 +38,10 @@ const DUST_DENSITY = 0.000045;
 const MAX_MAIN = 170;
 const MAX_DUST = 90;
 const MOUSE_RADIUS = 210;
-const RETURN_SPEED = 0.055;
-const DAMPING = 0.9;
-const REPULSION = 1.35;
+const HORIZONTAL_TETHER = 0.0018;
+const DAMPING = 0.94;
+const REPULSION = 1.22;
+const RISE_BOOST = 0.012;
 
 const randomRange = (min: number, max: number) => Math.random() * (max - min) + min;
 
@@ -61,23 +65,27 @@ export function ParticleHeroBackground({ className = "" }: { className?: string 
       const x = Math.random() * width;
       const y = Math.random() * height;
       const brandColor = Math.random();
+      const size = randomRange(1.15, 2.9);
       return {
         x,
         y,
         originX: x,
-        originY: y,
-        vx: 0,
-        vy: 0,
-        size: randomRange(1, 2.4),
+        vx: randomRange(-0.24, 0.24),
+        vy: randomRange(-0.55, -0.12),
+        size,
         color: brandColor > 0.86 ? "#38BDF8" : brandColor > 0.62 ? "#10B981" : "#F5F7F5",
+        alpha: randomRange(0.38, 0.82),
+        phase: Math.random() * Math.PI * 2,
+        lift: randomRange(0.009, 0.026) * (size > 2.2 ? 1.2 : 1),
+        drift: randomRange(0.006, 0.02),
       };
     });
 
     dustRef.current = Array.from({ length: dustCount }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.16,
-      vy: (Math.random() - 0.5) * 0.16,
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: randomRange(-0.3, -0.08),
       size: randomRange(0.55, 1.45),
       alpha: randomRange(0.12, 0.38),
       phase: Math.random() * Math.PI * 2,
@@ -130,9 +138,15 @@ export function ParticleHeroBackground({ className = "" }: { className?: string 
     for (const p of dust) {
       p.x += p.vx;
       p.y += p.vy;
+      p.vx += Math.sin(time * 0.00035 + p.phase) * 0.002;
+      p.vy -= 0.0016;
       if (p.x < -4) p.x = width + 4;
       if (p.x > width + 4) p.x = -4;
-      if (p.y < -4) p.y = height + 4;
+      if (p.y < -4) {
+        p.y = height + 4;
+        p.x = Math.random() * width;
+        p.vy = randomRange(-0.3, -0.08);
+      }
       if (p.y > height + 4) p.y = -4;
 
       const twinkle = Math.sin(time * 0.0018 + p.phase) * 0.5 + 0.5;
@@ -159,15 +173,32 @@ export function ParticleHeroBackground({ className = "" }: { className?: string 
         }
       }
 
-      p.vx += (p.originX - p.x) * RETURN_SPEED;
-      p.vy += (p.originY - p.y) * RETURN_SPEED;
+      const wave = Math.sin(time * 0.00055 + p.phase) * p.drift;
+      p.vx += (p.originX - p.x) * HORIZONTAL_TETHER + wave;
+      p.vy -= p.lift + RISE_BOOST;
       p.vx *= DAMPING;
       p.vy *= DAMPING;
       p.x += p.vx;
       p.y += p.vy;
 
+      if (p.y < -18) {
+        p.y = height + 18;
+        p.x = Math.random() * width;
+        p.originX = p.x;
+        p.vx = randomRange(-0.22, 0.22);
+        p.vy = randomRange(-0.52, -0.18);
+      }
+      if (p.x < -18) {
+        p.x = width + 18;
+        p.originX = p.x;
+      }
+      if (p.x > width + 18) {
+        p.x = -18;
+        p.originX = p.x;
+      }
+
       const velocity = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-      const opacity = Math.min(0.34 + velocity * 0.055, 0.95);
+      const opacity = Math.min(p.alpha + velocity * 0.045, 0.95);
       ctx.globalAlpha = opacity;
       ctx.fillStyle = p.color;
       ctx.beginPath();
