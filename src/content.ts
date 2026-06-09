@@ -33,9 +33,9 @@ export type Sector = {
 export const flags = { insightsEnabled: false };
 
 export const brand = {
-  name: "ENIRIQ",
+  name: "Startup A",
   tagline: "‹energy transition, utilities, and applied AI advisory›",
-  email: "‹hello@eniriq.com›",
+  email: "‹hello@startupa.com›",
   linkedin: "‹linkedin url›",
   location: "‹location›",
 };
@@ -49,7 +49,7 @@ export const nav: NavItem[] = [
 ];
 
 export const meta = {
-  defaultDescription: "‹default ENIRIQ page description›",
+  defaultDescription: "‹default page description›",
   home: { title: "‹home page title›", description: "‹home page description›" },
   whatWeDo: { title: "‹what we do page title›", description: "‹what we do page description›" },
   sectors: { title: "‹sectors page title›", description: "‹sectors page description›" },
@@ -286,7 +286,7 @@ export const home = {
 
 export const whatWeDo = {
   hero: {
-    title: "‹what ENIRIQ helps organisations do›",
+    title: "‹what we help organisations do›",
     intro: "‹intro to the capability model and AI implementation spine›",
     cta: { label: "Talk to us", href: "/contact" },
   },
