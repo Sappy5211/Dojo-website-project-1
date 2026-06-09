@@ -11,7 +11,7 @@ import { home, meta, people, ui } from "@/content";
 export const metadata: Metadata = {
   title: meta.people.title,
   description: meta.people.description,
-  openGraph: { title: meta.people.title, images: ["/og/people.png"] },
+  openGraph: { title: meta.people.title },
   alternates: { canonical: "/people" },
 };
 

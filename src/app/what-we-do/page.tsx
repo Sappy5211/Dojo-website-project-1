@@ -15,7 +15,7 @@ import { meta, sectors, ui, whatWeDo } from "@/content";
 export const metadata: Metadata = {
   title: meta.whatWeDo.title,
   description: meta.whatWeDo.description,
-  openGraph: { title: meta.whatWeDo.title, images: ["/og/what-we-do.png"] },
+  openGraph: { title: meta.whatWeDo.title },
   alternates: { canonical: "/what-we-do" },
 };
 

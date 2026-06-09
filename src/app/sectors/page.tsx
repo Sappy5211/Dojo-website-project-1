@@ -10,7 +10,7 @@ import { home, meta, sectors, ui } from "@/content";
 export const metadata: Metadata = {
   title: meta.sectors.title,
   description: meta.sectors.description,
-  openGraph: { title: meta.sectors.title, images: ["/og/sectors.png"] },
+  openGraph: { title: meta.sectors.title },
   alternates: { canonical: "/sectors" },
 };
 

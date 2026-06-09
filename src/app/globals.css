@@ -72,6 +72,7 @@
   html {
     scroll-behavior: smooth;
     color-scheme: dark;
+    scroll-padding-top: 6rem;
   }
 
   body {

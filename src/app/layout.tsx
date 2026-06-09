@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("http://localhost:3001"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001"),
   title: {
     default: "Startup A",
     template: "%s | Startup A",
@@ -41,9 +41,10 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-ink text-mist">
+        <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-energy focus:px-4 focus:py-2 focus:font-semibold focus:text-ink">Skip to content</a>
         <TooltipProvider>
           <SiteNav />
-          <main>{children}</main>
+          <main id="main">{children}</main>
           <Footer />
         </TooltipProvider>
       </body>

@@ -48,7 +48,7 @@ export function Footer() {
           <AnimatedContainer className="relative" delay={0.1}>
             <div className="mb-4 flex items-center gap-3">
               <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-energy via-energy-bright to-cyan text-sm font-bold text-ink">
-                E
+                S
               </span>
               <span className="text-lg font-semibold tracking-[0.18em]">{brand.name}</span>
             </div>

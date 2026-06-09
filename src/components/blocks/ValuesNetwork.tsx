@@ -41,9 +41,9 @@ export function ValuesNetwork({ values }: { values: Value[] }) {
           <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
             <defs>
               <linearGradient id="values-grad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#16A34A" />
-                <stop offset="50%" stopColor="#10B981" />
-                <stop offset="100%" stopColor="#38BDF8" />
+                <stop offset="0%" stopColor="#18E27B" />
+                <stop offset="50%" stopColor="#5DFFA8" />
+                <stop offset="100%" stopColor="#1FE3CF" />
               </linearGradient>
             </defs>
             {positions.slice(1).map((point, index) => {

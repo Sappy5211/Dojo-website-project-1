@@ -19,7 +19,7 @@ export function PersonCard({ person, light = false }: { person: Person; light?: 
         {person.avatar ? (
           <Image src={person.avatar} alt={person.name} width={96} height={96} className="h-full w-full object-cover" />
         ) : (
-          <div className="grid h-full w-full place-items-center text-xl font-bold text-white">{person.initials}</div>
+          <div className="grid h-full w-full place-items-center text-xl font-bold text-ink">{person.initials}</div>
         )}
       </div>
       <h3 className="text-base font-semibold">{person.name}</h3>

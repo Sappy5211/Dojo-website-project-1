@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 export function CapabilityCard({ capability, index = 0, light = false }: { capability: Capability; index?: number; light?: boolean }) {
   return (
     <motion.article
-      data-glow
       onPointerMove={(event) => {
         const target = event.currentTarget;
         const rect = target.getBoundingClientRect();
@@ -24,8 +23,8 @@ export function CapabilityCard({ capability, index = 0, light = false }: { capab
       )}
       style={{
         backgroundImage: light
-          ? "radial-gradient(360px circle at calc(var(--x, 0) * 1px) calc(var(--y, 0) * 1px), rgba(16,185,129,0.16), transparent 42%)"
-          : "radial-gradient(360px circle at calc(var(--x, 0) * 1px) calc(var(--y, 0) * 1px), rgba(56,189,248,0.16), transparent 42%)",
+          ? "radial-gradient(360px circle at calc(var(--x, 0) * 1px) calc(var(--y, 0) * 1px), rgba(24,226,123,0.16), transparent 42%)"
+          : "radial-gradient(360px circle at calc(var(--x, 0) * 1px) calc(var(--y, 0) * 1px), rgba(31,227,207,0.16), transparent 42%)",
       }}
     >
       <div className="mb-8 flex h-10 w-10 items-center justify-center rounded-full border border-energy/30 bg-energy/10 font-mono text-sm text-energy">

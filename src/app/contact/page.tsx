@@ -10,7 +10,7 @@ import { contact, meta, ui } from "@/content";
 export const metadata: Metadata = {
   title: meta.contact.title,
   description: meta.contact.description,
-  openGraph: { title: meta.contact.title, images: ["/og/contact.png"] },
+  openGraph: { title: meta.contact.title },
   alternates: { canonical: "/contact" },
 };
 

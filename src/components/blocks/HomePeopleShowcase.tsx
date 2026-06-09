@@ -119,9 +119,9 @@ function PeopleNameRow({
       onMouseLeave={() => onHover(null)}
     >
       <div className="flex items-center gap-3">
-        <span className={cn("h-3 w-4 rounded-[5px] bg-ink-soft/25 transition-all duration-300", isActive && "w-6 bg-energy")} />
+        <span className={cn("h-3 w-4 rounded-[5px] bg-ink-soft/25 transition-[width,background-color] duration-300", isActive && "w-6 bg-energy")} />
         <h3 className={cn("text-lg font-semibold leading-none tracking-tight transition-colors duration-300", isActive ? "text-ink-soft" : "text-ink-soft/76")}>{person.name}</h3>
-        <a href={person.linkedin} aria-label={`${person.name} LinkedIn`} className={cn("ml-0.5 rounded-full p-1 text-ink-soft/40 transition-all duration-200 hover:bg-ink-soft/10 hover:text-energy", isActive ? "translate-x-0 opacity-100" : "-translate-x-1 opacity-0")}>
+        <a href={person.linkedin} aria-label={`${person.name} LinkedIn`} className={cn("ml-0.5 rounded-full p-1 text-ink-soft/40 transition-[transform,opacity,color,background-color] duration-200 hover:bg-ink-soft/10 hover:text-energy", isActive ? "translate-x-0 opacity-100" : "-translate-x-1 opacity-0")}>
           <ExternalLink size={13} />
         </a>
       </div>

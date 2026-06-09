@@ -90,7 +90,7 @@ export function SiteNav() {
       <header
         ref={navRef}
         className={cn(
-          "fixed inset-x-0 top-0 z-50 h-[72px] transition-all duration-300",
+          "fixed inset-x-0 top-0 z-50 h-[72px] transition-[background-color,border-color,backdrop-filter] duration-300",
           scrolled || openMenu ? "border-b border-white/10 bg-ink/90 backdrop-blur-md" : "bg-transparent"
         )}
       >
@@ -98,7 +98,7 @@ export function SiteNav() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3" aria-label="Startup A home">
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-energy via-energy-bright to-cyan text-sm font-bold text-ink shadow-[0_0_24px_rgba(16,185,129,0.28)]">
-              E
+              S
             </span>
             <span className="text-lg font-semibold tracking-[0.18em]">{brand.name}</span>
           </Link>

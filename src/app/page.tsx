@@ -20,7 +20,7 @@ import { getPeopleBySlugs, home, meta, sectors, ui } from "@/content";
 export const metadata: Metadata = {
   title: meta.home.title,
   description: meta.home.description,
-  openGraph: { title: meta.home.title, images: ["/og/home.png"] },
+  openGraph: { title: meta.home.title },
   alternates: { canonical: "/" },
 };
 
