@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Footer } from "@/components/blocks/Footer";
 import { SiteNav } from "@/components/nav/SiteNav";
@@ -23,6 +23,11 @@ export const metadata: Metadata = {
     template: "%s | ENIRIQ",
   },
   description: meta.defaultDescription,
+};
+
+export const viewport: Viewport = {
+  themeColor: "#060A09",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({

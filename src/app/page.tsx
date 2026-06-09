@@ -3,17 +3,18 @@ import Link from "next/link";
 import { CapabilityCard } from "@/components/blocks/CapabilityCard";
 import { CTABand } from "@/components/blocks/CTABand";
 import { FocusAreaCard } from "@/components/blocks/FocusAreaCard";
-import { HeroCurrentPanel } from "@/components/blocks/HeroCurrentPanel";
 import { HomePeopleShowcase } from "@/components/blocks/HomePeopleShowcase";
+import { TheCurrentSection } from "@/components/blocks/TheCurrentSection";
 import { PressureCard } from "@/components/blocks/PressureCard";
 import { SectionHeader } from "@/components/blocks/SectionHeader";
 import { SectorCard } from "@/components/blocks/SectorCard";
 import { StepCard } from "@/components/blocks/StepCard";
 import { ValuesNetwork } from "@/components/blocks/ValuesNetwork";
-import { CurrentBackground } from "@/components/fx/CurrentBackground";
 import { CurrentLine } from "@/components/fx/CurrentLine";
+import { HeroBlurText } from "@/components/fx/HeroBlurText";
 import { ParticleHeroBackground } from "@/components/fx/ParticleHeroBackground";
 import { Reveal } from "@/components/fx/Reveal";
+import { RotatingEarth } from "@/components/fx/RotatingEarth";
 import { getPeopleBySlugs, home, meta, sectors, ui } from "@/content";
 
 export const metadata: Metadata = {
@@ -29,36 +30,51 @@ export default function HomePage() {
 
   return (
     <>
-      <section className="relative min-h-[108svh] overflow-hidden bg-ink pt-28 text-mist">
-        <ParticleHeroBackground className="scale-[1.08]" />
-        <div className="absolute inset-0 dark-scrim" aria-hidden />
-        <div className="container-eneriq relative z-10 grid min-h-[calc(108svh-7rem)] items-center gap-12 py-20 lg:grid-cols-[1.02fr_0.98fr]">
-          <div className="max-w-4xl">
-            <Reveal>
-              <p className="mb-6 text-xs font-semibold uppercase tracking-[0.25em] text-energy">{home.hero.eyebrow}</p>
-            </Reveal>
-            <h1 className="text-[clamp(2.5rem,6vw,4.5rem)] font-semibold leading-[1.05] tracking-tight">
-              {home.hero.h1Start} <span className="text-gradient">{home.hero.h1Accent}</span>{home.hero.h1End}
-            </h1>
-            <p className="mt-7 max-w-xl text-lg leading-relaxed text-mist/72">{home.hero.subline}</p>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <Link href={home.hero.primary.href} className="cta-lift rounded-full bg-gradient-to-r from-energy via-energy-bright to-cyan px-7 py-3 font-semibold text-white shadow-[0_1rem_2.5rem_rgba(16,185,129,0.24)]">{home.hero.primary.label}</Link>
+      <section className="relative flex min-h-[100svh] items-center overflow-hidden bg-ink pt-24 text-mist">
+        <ParticleHeroBackground />
+        <div
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,15,13,0.4),rgba(10,15,13,0.08)_44%,rgba(10,15,13,0.92))]"
+          aria-hidden
+        />
+        <div className="container-eneriq pointer-events-none relative z-10 flex flex-col items-center py-24 text-center">
+          <Reveal>
+            <p className="mb-7 text-xs font-semibold uppercase tracking-[0.3em] text-energy">{home.hero.eyebrow}</p>
+          </Reveal>
+          <h1 className="mx-auto max-w-5xl text-[clamp(2.75rem,6.5vw,5rem)] font-semibold leading-[1.04] tracking-tight">
+            <HeroBlurText
+              segments={[
+                { text: home.hero.h1Start },
+                { text: `${home.hero.h1Accent}${home.hero.h1End}`, accent: true },
+              ]}
+            />
+          </h1>
+          <Reveal delay={0.15}>
+            <p className="mx-auto mt-8 max-w-xl text-lg leading-relaxed text-mist/72">{home.hero.subline}</p>
+          </Reveal>
+          <Reveal delay={0.25}>
+            <div className="pointer-events-auto mt-11 flex flex-wrap justify-center gap-4">
+              <Link href={home.hero.primary.href} className="cta-lift rounded-full bg-gradient-to-r from-energy via-energy-bright to-cyan px-7 py-3 font-semibold text-ink shadow-[0_1rem_2.5rem_rgba(16,185,129,0.24)]">{home.hero.primary.label}</Link>
               <Link href={home.hero.secondary.href} className="cta-lift rounded-full border border-white/10 bg-white/5 px-7 py-3 font-semibold text-mist hover:border-energy/40 hover:bg-white/10">{home.hero.secondary.label}</Link>
             </div>
-          </div>
-          <HeroCurrentPanel />
-        </div>
-      </section>
-
-      <section className="relative overflow-hidden bg-paper py-24 text-ink-soft lg:py-32">
-        <CurrentBackground />
-        <div className="container-eneriq relative z-10">
-          <SectionHeader title={home.purpose.title} intro={home.purpose.body} light />
-          <Reveal>
-            <p className="max-w-3xl text-xl leading-relaxed text-ink-soft/80">{home.purpose.belief}</p>
           </Reveal>
         </div>
       </section>
+
+      <section className="relative overflow-hidden bg-ink py-24 text-mist lg:py-32">
+        <div className="container-eneriq relative z-10 grid items-center gap-14 lg:grid-cols-[1fr_1fr]">
+          <div>
+            <SectionHeader title={home.purpose.title} intro={home.purpose.body} />
+            <Reveal>
+              <p className="mt-6 max-w-xl text-xl leading-relaxed text-mist/80">{home.purpose.belief}</p>
+            </Reveal>
+          </div>
+          <Reveal delay={0.1}>
+            <RotatingEarth />
+          </Reveal>
+        </div>
+      </section>
+
+      <TheCurrentSection />
 
       <section className="relative bg-ink py-24 text-mist lg:py-32">
         <CurrentLine className="pointer-events-none absolute left-1/2 top-16 h-[calc(100%-8rem)] w-32 -translate-x-1/2 opacity-30" d="M50 0 C20 120 80 220 50 350 C20 460 80 520 50 600" />

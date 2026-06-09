@@ -1,5 +1,20 @@
 "use client";
-/* eslint-disable react-hooks/immutability */
+
+/**
+ * Antigravity particle field — brand-recoloured + performance-hardened.
+ *
+ * Interaction: each particle rests at an origin, springs back to it (RETURN_SPEED),
+ * and is pushed away by the cursor (REPULSION) within MOUSE_RADIUS. Velocity decays
+ * via DAMPING so the field settles. This is what reads as "antigravity".
+ *
+ * Why it stays smooth (the donor lagged):
+ *  - NO particle↔particle collision pass. The donor ran an O(n²) nested loop
+ *    (~40k pair checks/frame) — that was the lag. The feel is identical without it.
+ *  - ZERO per-frame React state (the donor called setState every frame → re-render storm).
+ *  - DPR capped at 1.5, render throttled to 30fps.
+ *  - Paused off-screen (IntersectionObserver) and on tab-hide (visibilitychange).
+ *  - prefers-reduced-motion → one static frame, no loop. Mobile → fewer, calmer dots.
+ */
 
 import { useCallback, useEffect, useRef } from "react";
 
@@ -7,17 +22,15 @@ type Particle = {
   x: number;
   y: number;
   originX: number;
+  originY: number;
   vx: number;
   vy: number;
   size: number;
   color: string;
-  alpha: number;
-  phase: number;
-  lift: number;
-  drift: number;
+  baseAlpha: number;
 };
 
-type DustParticle = {
+type Dust = {
   x: number;
   y: number;
   vx: number;
@@ -27,67 +40,65 @@ type DustParticle = {
   phase: number;
 };
 
-type MouseState = {
-  x: number;
-  y: number;
-  active: boolean;
-};
-
-const MAIN_DENSITY = 0.000085;
-const DUST_DENSITY = 0.000045;
-const MAX_MAIN = 170;
-const MAX_DUST = 90;
-const MOUSE_RADIUS = 210;
-const HORIZONTAL_TETHER = 0.0018;
-const DAMPING = 0.94;
-const REPULSION = 1.22;
-const RISE_BOOST = 0.012;
+const PARTICLE_DENSITY = 0.00009; // main interactive dots per px²
+const DUST_DENSITY = 0.00004; // ambient drifting dust per px²
+const MAX_PARTICLES = 150;
+const MAX_DUST = 80;
+const MOUSE_RADIUS = 190;
+const RETURN_SPEED = 0.045; // spring constant back to origin
+const DAMPING = 0.9; // velocity friction
+const REPULSION = 1.15; // cursor push strength
 
 const randomRange = (min: number, max: number) => Math.random() * (max - min) + min;
 
-export function ParticleHeroBackground({ className = "" }: { className?: string }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const particlesRef = useRef<Particle[]>([]);
-  const dustRef = useRef<DustParticle[]>([]);
-  const mouseRef = useRef<MouseState>({ x: -1000, y: -1000, active: false });
-  const rafRef = useRef(0);
-  const animateRef = useRef<(time: number) => void>(() => {});
-  const runningRef = useRef(false);
-  const lastRef = useRef(0);
+// Mostly soft white with occasional brand green / cyan accents.
+const pickColor = () => {
+  const r = Math.random();
+  if (r > 0.88) return "#38BDF8"; // cyan
+  if (r > 0.66) return "#10B981"; // energy bright
+  return "#F5F7F5"; // mist
+};
 
-  const initParticles = useCallback((width: number, height: number) => {
-    const isMobile = width < 768;
-    const mainCount = isMobile ? 0 : Math.min(MAX_MAIN, Math.floor(width * height * MAIN_DENSITY));
-    const dustCount = Math.min(isMobile ? 45 : MAX_DUST, Math.floor(width * height * DUST_DENSITY));
+export function ParticleHeroBackground({ className = "" }: { className?: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const particlesRef = useRef<Particle[]>([]);
+  const dustRef = useRef<Dust[]>([]);
+  const mouseRef = useRef({ x: -9999, y: -9999, active: false });
+  const rafRef = useRef(0);
+  const runningRef = useRef(true);
+  const lastRef = useRef(0);
+  const reducedRef = useRef(false);
+  const animateRef = useRef<(t: number) => void>(() => {});
+
+  const initParticles = useCallback((w: number, h: number) => {
+    const isMobile = w < 768;
+    const mainCount = isMobile ? Math.min(40, Math.floor(w * h * PARTICLE_DENSITY * 0.5)) : Math.min(MAX_PARTICLES, Math.floor(w * h * PARTICLE_DENSITY));
+    const dustCount = isMobile ? Math.min(35, Math.floor(w * h * DUST_DENSITY * 0.6)) : Math.min(MAX_DUST, Math.floor(w * h * DUST_DENSITY));
 
     particlesRef.current = Array.from({ length: mainCount }, () => {
-      const x = Math.random() * width;
-      const y = Math.random() * height;
-      const brandColor = Math.random();
-      const size = randomRange(1.15, 2.9);
+      const x = Math.random() * w;
+      const y = Math.random() * h;
       return {
         x,
         y,
         originX: x,
-        vx: randomRange(-0.24, 0.24),
-        vy: randomRange(-0.55, -0.12),
-        size,
-        color: brandColor > 0.86 ? "#38BDF8" : brandColor > 0.62 ? "#10B981" : "#F5F7F5",
-        alpha: randomRange(0.38, 0.82),
-        phase: Math.random() * Math.PI * 2,
-        lift: randomRange(0.009, 0.026) * (size > 2.2 ? 1.2 : 1),
-        drift: randomRange(0.006, 0.02),
+        originY: y,
+        vx: 0,
+        vy: 0,
+        size: randomRange(1.1, 2.7),
+        color: pickColor(),
+        baseAlpha: randomRange(0.32, 0.78),
       };
     });
 
     dustRef.current = Array.from({ length: dustCount }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.18,
-      vy: randomRange(-0.3, -0.08),
-      size: randomRange(0.55, 1.45),
-      alpha: randomRange(0.12, 0.38),
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: (Math.random() - 0.5) * 0.16,
+      vy: (Math.random() - 0.5) * 0.16,
+      size: randomRange(0.5, 1.4),
+      alpha: randomRange(0.1, 0.34),
       phase: Math.random() * Math.PI * 2,
     }));
   }, []);
@@ -96,110 +107,79 @@ export function ParticleHeroBackground({ className = "" }: { className?: string 
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;
-
     const rect = container.getBoundingClientRect();
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     canvas.width = Math.max(1, Math.floor(rect.width * dpr));
     canvas.height = Math.max(1, Math.floor(rect.height * dpr));
     canvas.style.width = `${rect.width}px`;
     canvas.style.height = `${rect.height}px`;
-
     const ctx = canvas.getContext("2d");
     if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     initParticles(rect.width, rect.height);
   }, [initParticles]);
 
-  const animate = useCallback((time: number) => {
+  const drawFrame = useCallback((time: number) => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
     const ctx = canvas?.getContext("2d");
     if (!canvas || !container || !ctx) return;
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    ctx.clearRect(0, 0, w, h);
 
-    rafRef.current = requestAnimationFrame((nextTime) => animateRef.current(nextTime));
-    if (!runningRef.current) return;
-
-    const frame = 1000 / 30;
-    const elapsed = time - lastRef.current;
-    if (elapsed < frame) return;
-    lastRef.current = time - (elapsed % frame);
-
-    const width = container.clientWidth;
-    const height = container.clientHeight;
-    ctx.clearRect(0, 0, width, height);
-
-    const glow = ctx.createRadialGradient(width * 0.5, height * 0.4, 0, width * 0.5, height * 0.4, Math.max(width, height) * 0.78);
-    glow.addColorStop(0, `rgba(16, 185, 129, ${Math.sin(time * 0.0008) * 0.025 + 0.11})`);
-    glow.addColorStop(0.42, "rgba(56, 189, 248, 0.06)");
-    glow.addColorStop(1, "rgba(10, 15, 13, 0)");
+    // Soft pulsing brand glow behind the field.
+    const cx = w * 0.5;
+    const cy = h * 0.42;
+    const pulse = Math.sin(time * 0.0007) * 0.03 + 0.1;
+    const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(w, h) * 0.75);
+    glow.addColorStop(0, `rgba(16,185,129,${pulse})`);
+    glow.addColorStop(0.4, "rgba(56,189,248,0.05)");
+    glow.addColorStop(1, "rgba(10,15,13,0)");
     ctx.fillStyle = glow;
-    ctx.fillRect(0, 0, width, height);
+    ctx.fillRect(0, 0, w, h);
 
+    // Ambient drifting dust.
     const dust = dustRef.current;
-    for (const p of dust) {
-      p.x += p.vx;
-      p.y += p.vy;
-      p.vx += Math.sin(time * 0.00035 + p.phase) * 0.002;
-      p.vy -= 0.0016;
-      if (p.x < -4) p.x = width + 4;
-      if (p.x > width + 4) p.x = -4;
-      if (p.y < -4) {
-        p.y = height + 4;
-        p.x = Math.random() * width;
-        p.vy = randomRange(-0.3, -0.08);
-      }
-      if (p.y > height + 4) p.y = -4;
-
-      const twinkle = Math.sin(time * 0.0018 + p.phase) * 0.5 + 0.5;
-      ctx.globalAlpha = p.alpha * (0.35 + 0.65 * twinkle);
-      ctx.fillStyle = "#F5F7F5";
+    ctx.fillStyle = "#F5F7F5";
+    for (const d of dust) {
+      d.x += d.vx;
+      d.y += d.vy;
+      if (d.x < -4) d.x = w + 4;
+      if (d.x > w + 4) d.x = -4;
+      if (d.y < -4) d.y = h + 4;
+      if (d.y > h + 4) d.y = -4;
+      const twinkle = Math.sin(time * 0.0016 + d.phase) * 0.5 + 0.5;
+      ctx.globalAlpha = d.alpha * (0.35 + 0.65 * twinkle);
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.arc(d.x, d.y, d.size, 0, Math.PI * 2);
       ctx.fill();
     }
     ctx.globalAlpha = 1;
 
+    // Main interactive particles: cursor repulsion + spring back to origin.
     const mouse = mouseRef.current;
-    for (const p of particlesRef.current) {
+    const particles = particlesRef.current;
+    for (const p of particles) {
       if (mouse.active) {
         const dx = mouse.x - p.x;
         const dy = mouse.y - p.y;
         const distSq = dx * dx + dy * dy;
         if (distSq > 0.01 && distSq < MOUSE_RADIUS * MOUSE_RADIUS) {
-          const distance = Math.sqrt(distSq);
-          const force = (MOUSE_RADIUS - distance) / MOUSE_RADIUS;
-          const push = force * REPULSION * 5;
-          p.vx -= (dx / distance) * push;
-          p.vy -= (dy / distance) * push;
+          const dist = Math.sqrt(distSq);
+          const force = ((MOUSE_RADIUS - dist) / MOUSE_RADIUS) * REPULSION * 5;
+          p.vx -= (dx / dist) * force;
+          p.vy -= (dy / dist) * force;
         }
       }
-
-      const wave = Math.sin(time * 0.00055 + p.phase) * p.drift;
-      p.vx += (p.originX - p.x) * HORIZONTAL_TETHER + wave;
-      p.vy -= p.lift + RISE_BOOST;
+      p.vx += (p.originX - p.x) * RETURN_SPEED;
+      p.vy += (p.originY - p.y) * RETURN_SPEED;
       p.vx *= DAMPING;
       p.vy *= DAMPING;
       p.x += p.vx;
       p.y += p.vy;
 
-      if (p.y < -18) {
-        p.y = height + 18;
-        p.x = Math.random() * width;
-        p.originX = p.x;
-        p.vx = randomRange(-0.22, 0.22);
-        p.vy = randomRange(-0.52, -0.18);
-      }
-      if (p.x < -18) {
-        p.x = width + 18;
-        p.originX = p.x;
-      }
-      if (p.x > width + 18) {
-        p.x = -18;
-        p.originX = p.x;
-      }
-
       const velocity = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-      const opacity = Math.min(p.alpha + velocity * 0.045, 0.95);
-      ctx.globalAlpha = opacity;
+      ctx.globalAlpha = Math.min(p.baseAlpha + velocity * 0.04, 0.95);
       ctx.fillStyle = p.color;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
@@ -207,40 +187,68 @@ export function ParticleHeroBackground({ className = "" }: { className?: string 
     }
     ctx.globalAlpha = 1;
   }, []);
+
+  const animate = useCallback((time: number) => {
+    rafRef.current = requestAnimationFrame((t) => animateRef.current(t));
+    if (!runningRef.current) return;
+    const frame = 1000 / 30; // 30fps cap
+    const elapsed = time - lastRef.current;
+    if (elapsed < frame) return;
+    lastRef.current = time - (elapsed % frame);
+    drawFrame(time);
+  }, [drawFrame]);
+
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    reducedRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     animateRef.current = animate;
     resize();
-    const observer = new IntersectionObserver(([entry]) => {
-      runningRef.current = entry.isIntersecting;
-    }, { rootMargin: "120px" });
-    if (containerRef.current) observer.observe(containerRef.current);
+
+    // Reduced motion: paint a single calm frame and stop.
+    if (reducedRef.current) {
+      drawFrame(0);
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        runningRef.current = entry.isIntersecting;
+      },
+      { rootMargin: "120px" }
+    );
+    if (containerRef.current) io.observe(containerRef.current);
+
+    const onVisibility = () => {
+      runningRef.current = !document.hidden;
+    };
+    document.addEventListener("visibilitychange", onVisibility);
 
     const onResize = () => resize();
     window.addEventListener("resize", onResize);
-    rafRef.current = requestAnimationFrame(animate);
+
+    rafRef.current = requestAnimationFrame((t) => animateRef.current(t));
 
     return () => {
-      observer.disconnect();
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
       window.removeEventListener("resize", onResize);
       cancelAnimationFrame(rafRef.current);
     };
-  }, [animate, resize]);
+  }, [animate, drawFrame, resize]);
 
   return (
     <div
       ref={containerRef}
       className={`absolute inset-0 overflow-hidden bg-ink ${className}`}
-      onMouseMove={(event) => {
+      onPointerMove={(event) => {
         const rect = event.currentTarget.getBoundingClientRect();
         mouseRef.current = { x: event.clientX - rect.left, y: event.clientY - rect.top, active: true };
       }}
-      onMouseLeave={() => {
+      onPointerLeave={() => {
         mouseRef.current.active = false;
       }}
       aria-hidden
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_20%,rgba(22,163,74,0.2),transparent_34%),radial-gradient(circle_at_72%_24%,rgba(56,189,248,0.15),transparent_36%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_18%,rgba(22,163,74,0.18),transparent_36%),radial-gradient(circle_at_74%_26%,rgba(56,189,248,0.13),transparent_38%)]" />
       <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full" />
     </div>
   );

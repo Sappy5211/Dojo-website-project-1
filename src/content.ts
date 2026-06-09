@@ -100,6 +100,8 @@ export const ui = {
     relatedIntro: "‹related sector intro›",
     ctaHeading: "‹what we do CTA heading›",
     ctaLine: "‹what we do CTA line›",
+    pipelineStart: "‹start›",
+    pipelineOutcome: "‹outcome›",
   },
   sectorsSections: {
     eyebrow: "‹sectors›",
@@ -121,6 +123,7 @@ export const ui = {
     aiIntro: "‹AI/data opportunity intro›",
     peopleTitle: "‹relevant people and capabilities›",
     peopleIntro: "‹relevant people intro›",
+    helpCols: ["‹challenge›", "‹capability›", "‹outcome›"],
   },
   peopleSections: {
     eyebrow: "‹people›",
@@ -138,6 +141,18 @@ export const ui = {
     detailsTitle: "‹direct details›",
   },
   insightsSections: { eyebrow: "‹insights›" },
+};
+
+export const footer = {
+  newsletterHeading: "‹stay connected›",
+  newsletterBlurb: "‹short placeholder inviting people to stay in the loop on the transition›",
+  emailPlaceholder: "‹your email›",
+  linksHeading: "‹explore›",
+  contactHeading: "‹contact›",
+  followHeading: "‹follow us›",
+  legalLinks: ["‹privacy policy›", "‹terms of service›", "‹cookie settings›"],
+  linkedinTooltip: "‹connect on LinkedIn›",
+  emailTooltip: "‹email us›",
 };
 
 export const people = {
@@ -214,7 +229,12 @@ export const home = {
       eyebrow: "‹the Current›",
       title: "‹energy → data → AI-supported decision → implementation›",
       caption: "‹visual placeholder for the shared decision flow›",
-      nodes: ["‹Energy system›", "‹Data layer›", "‹AI support›", "‹Implementation›"],
+      nodes: [
+        { label: "‹Energy system›", desc: "‹short placeholder describing the energy system layer and what it represents in the flow›" },
+        { label: "‹Data layer›", desc: "‹short placeholder describing the data layer that informs decisions›" },
+        { label: "‹AI support›", desc: "‹short placeholder describing how AI supports human decisions, with oversight›" },
+        { label: "‹Implementation›", desc: "‹short placeholder describing how decisions become delivered implementation›" },
+      ],
     },
   },
   purpose: {
@@ -358,6 +378,7 @@ export const contact = {
   },
   directDetails: { email: brand.email, linkedin: brand.linkedin, location: brand.location },
   reassurance: "‹what happens next›",
+  directLabels: { email: "‹email›", linkedin: "‹linkedin›", location: "‹location›" },
 };
 
 export const insights = {
