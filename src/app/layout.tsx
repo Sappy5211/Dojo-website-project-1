@@ -19,8 +19,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("http://localhost:3001"),
   title: {
-    default: "ENIRIQ",
-    template: "%s | ENIRIQ",
+    default: "Startup A",
+    template: "%s | Startup A",
   },
   description: meta.defaultDescription,
 };

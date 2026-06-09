@@ -96,7 +96,7 @@ export function SiteNav() {
       >
         <div className="container-eneriq relative flex h-full items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3" aria-label="ENIRIQ home">
+          <Link href="/" className="flex items-center gap-3" aria-label="Startup A home">
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-energy via-energy-bright to-cyan text-sm font-bold text-ink shadow-[0_0_24px_rgba(16,185,129,0.28)]">
               E
             </span>

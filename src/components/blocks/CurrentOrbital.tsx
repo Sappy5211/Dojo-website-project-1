@@ -88,7 +88,7 @@ export function CurrentOrbital({
         {/* Centre nucleus */}
         <div className="absolute left-1/2 top-1/2 z-[40] -translate-x-1/2 -translate-y-1/2">
           <div className="relative grid h-16 w-16 place-items-center rounded-full bg-gradient-to-br from-energy via-energy-bright to-cyan shadow-[0_0_32px_rgba(16,185,129,0.4)]">
-            <span className="text-[10px] font-bold tracking-[0.15em] text-ink">ENIRIQ</span>
+            <span className="text-[10px] font-bold tracking-[0.15em] text-ink">S</span>
             <span className="absolute inset-0 animate-ping rounded-full bg-energy/20" aria-hidden />
           </div>
         </div>
