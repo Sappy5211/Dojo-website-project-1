@@ -23,11 +23,17 @@ export function CurrentOrbital({
   active,
   setActive,
   paused = false,
+  radiusFactor = 0.36,
+  centerClassName = "",
   className = "",
 }: {
   active: number | null;
   setActive: (updater: number | null | ((current: number | null) => number | null)) => void;
   paused?: boolean;
+  /** Orbit radius as a fraction of the widget width. Larger = orbs sit nearer the edge. */
+  radiusFactor?: number;
+  /** Extra classes on the centre nucleus (e.g. `lg:hidden` when content sits at the centre). */
+  centerClassName?: string;
   className?: string;
 }) {
   const nodes = home.hero.diagram.nodes;
@@ -38,14 +44,18 @@ export function CurrentOrbital({
   const angleRef = useRef(0);
   const pausedRef = useRef(paused);
   const activeRef = useRef<number | null>(null);
+  const radiusRef = useRef(radiusFactor);
 
-  // Mirror state into refs so the rAF loop reads fresh values without re-subscribing.
+  // Mirror props into refs so the rAF loop reads fresh values without re-subscribing.
   useEffect(() => {
     activeRef.current = active;
   }, [active]);
   useEffect(() => {
     pausedRef.current = paused;
   }, [paused]);
+  useEffect(() => {
+    radiusRef.current = radiusFactor;
+  }, [radiusFactor]);
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -55,7 +65,7 @@ export function CurrentOrbital({
     const apply = () => {
       const wrap = wrapRef.current;
       if (!wrap) return;
-      const radius = wrap.clientWidth * 0.36;
+      const radius = wrap.clientWidth * radiusRef.current;
       for (let i = 0; i < total; i++) {
         const el = nodeRefs.current[i];
         if (!el) continue;
@@ -104,7 +114,7 @@ export function CurrentOrbital({
         <div className="absolute inset-[26%] rounded-full border border-white/[0.06]" aria-hidden />
 
         {/* Centre */}
-        <div className="absolute left-1/2 top-1/2 z-[40] -translate-x-1/2 -translate-y-1/2">
+        <div className={`absolute left-1/2 top-1/2 z-[40] -translate-x-1/2 -translate-y-1/2 ${centerClassName}`}>
           <div className="relative grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-energy via-energy-bright to-cyan shadow-[0_0_32px_rgba(16,185,129,0.4)]">
             <span className="text-[11px] font-bold tracking-[0.15em] text-ink">ENIRIQ</span>
             <span className="absolute inset-0 animate-ping rounded-full bg-energy/20" aria-hidden />
@@ -127,7 +137,7 @@ export function CurrentOrbital({
               className="absolute left-1/2 top-1/2 rounded-full will-change-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-energy focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
             >
               <span
-                className={`relative grid h-14 w-14 place-items-center rounded-full border-2 transition-[background-color,border-color,transform,box-shadow] duration-300 ${
+                className={`relative grid h-11 w-11 place-items-center rounded-full border-2 transition-[background-color,border-color,transform,box-shadow] duration-300 ${
                   isActive
                     ? "scale-125 border-energy bg-energy text-ink shadow-[0_0_24px_rgba(16,185,129,0.5)]"
                     : isNeighbor(i)
@@ -135,7 +145,7 @@ export function CurrentOrbital({
                       : "border-white/25 bg-ink text-energy hover:border-energy/60"
                 }`}
               >
-                <IconGlyph name={NODE_ICONS[i]} className="h-6 w-6" />
+                <IconGlyph name={NODE_ICONS[i]} className="h-5 w-5" />
                 <span
                   className={`absolute left-1/2 top-[140%] -translate-x-1/2 whitespace-nowrap text-[11px] font-semibold tracking-wide transition-colors ${
                     isActive ? "text-mist" : "text-mist/55"
