@@ -5,13 +5,16 @@ import { motion, MotionValue, useReducedMotion, useScroll, useTransform } from "
 import { Value, ui } from "@/content";
 import { IconGlyph } from "./IconGlyph";
 
+// Anchor points are card CENTRES (cards use x/y: -50%), so keep them in a
+// safe band — a 17rem card needs ~14% half-width / ~13% half-height of the
+// box to stay inside without clipping at the edges.
 const positions = [
-  { x: 9, y: 22 },
-  { x: 39, y: 12 },
+  { x: 20, y: 20 },
+  { x: 44, y: 16 },
   { x: 72, y: 28 },
-  { x: 58, y: 58 },
-  { x: 24, y: 67 },
-  { x: 82, y: 82 },
+  { x: 58, y: 54 },
+  { x: 30, y: 62 },
+  { x: 76, y: 78 },
 ];
 
 export function ValuesNetwork({ values }: { values: Value[] }) {
@@ -115,7 +118,7 @@ function ValueCard({
   progress: MotionValue<number>;
   reduce: boolean;
 }) {
-  const opacity = useTransform(progress, [index / 6, index / 6 + 0.04], [0.45, 1]);
+  const opacity = useTransform(progress, [index / 6, index / 6 + 0.04], [0.55, 1]);
   const scale = useTransform(progress, [index / 6, index / 6 + 0.06], [0.92, 1]);
 
   return (
