@@ -2,23 +2,15 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import { Pressure } from "@/content";
-import { cn } from "@/lib/utils";
 import { Reveal } from "../fx/Reveal";
 import { IconGlyph } from "./IconGlyph";
 
-export function PressureCard({ pressure, light = false }: { pressure: Pressure; light?: boolean }) {
+export function PressureCard({ pressure, light: _light = false }: { pressure: Pressure; light?: boolean }) {
   const reduce = useReducedMotion();
 
   return (
     <Reveal>
-      <article
-        className={cn(
-          "group relative overflow-hidden rounded-2xl border p-6",
-          light
-            ? "border-ink-soft/10 bg-white text-ink-soft"
-            : "glass-surface"
-        )}
-      >
+      <article className="group relative overflow-hidden rounded-2xl border border-hairline bg-panel p-6">
         {/* Top accent line — slides in on hover (transform only) */}
         {!reduce && (
           <motion.div
@@ -33,7 +25,7 @@ export function PressureCard({ pressure, light = false }: { pressure: Pressure; 
         {/* Icon with subtle electric-pulse on group-hover */}
         <div className="mb-5 inline-block">
           <motion.div
-            className={cn("text-energy")}
+            className="text-accent-ink"
             animate={reduce ? {} : undefined}
             whileHover={reduce ? {} : { opacity: [1, 0.6, 1] }}
             transition={{ duration: 0.55, ease: "easeInOut" }}
@@ -42,13 +34,8 @@ export function PressureCard({ pressure, light = false }: { pressure: Pressure; 
           </motion.div>
         </div>
 
-        <h3 className="text-lg font-semibold leading-snug">{pressure.title}</h3>
-        <p
-          className={cn(
-            "mt-3 text-sm leading-relaxed",
-            light ? "text-ink-soft/70" : "text-mist/68"
-          )}
-        >
+        <h3 className="text-lg font-semibold leading-snug text-content">{pressure.title}</h3>
+        <p className="mt-3 text-sm leading-relaxed text-content-muted">
           {pressure.desc}
         </p>
       </article>

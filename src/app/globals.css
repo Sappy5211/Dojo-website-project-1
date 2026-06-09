@@ -2,11 +2,14 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-heading: var(--font-sans);
 
+  /* Static brand / FX tokens — never flip */
   --color-ink: #060A09;
   --color-ink-soft: #0F1714;
   --color-paper: #F2F6F1;
@@ -15,6 +18,16 @@
   --color-energy-bright: #5DFFA8;
   --color-cyan: #1FE3CF;
   --color-amber: #F2C24E;
+
+  /* Semantic tokens — flip between :root (light) and .dark */
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-panel: var(--panel);
+  --color-content: var(--content);
+  --color-content-muted: var(--content-muted);
+  --color-hairline: var(--hairline);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-2-ink: var(--accent-2-ink);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -42,7 +55,55 @@
   --radius-3xl: calc(var(--radius) * 2.2);
 }
 
+/* ─── LIGHT defaults (:root) ─────────────────────────────────────────────── */
 :root {
+  /* Semantic surface tokens */
+  --surface: #FFFFFF;
+  --surface-2: #F2F6F1;
+  --panel: #FFFFFF;
+  --content: #0B1110;
+  --content-muted: #51605A;
+  --hairline: rgba(11, 17, 16, 0.12);
+  --accent-ink: #047857;
+  --accent-2-ink: #0E7490;
+  color-scheme: light;
+
+  /* shadcn / Radix vars — light values */
+  --background: #FFFFFF;
+  --foreground: #0B1110;
+  --card: #FFFFFF;
+  --card-foreground: #0B1110;
+  --popover: #FFFFFF;
+  --popover-foreground: #0B1110;
+  --primary: #18E27B;
+  --primary-foreground: #04100A;
+  --secondary: #F2F6F1;
+  --secondary-foreground: #0B1110;
+  --muted: rgba(11, 17, 16, 0.08);
+  --muted-foreground: #51605A;
+  --accent: #18E27B;
+  --accent-foreground: #04100A;
+  --destructive: #dc2626;
+  --border: rgba(11, 17, 16, 0.12);
+  --input: rgba(11, 17, 16, 0.10);
+  --ring: #18E27B;
+  --radius: 0.75rem;
+}
+
+/* ─── DARK overrides (.dark) ─────────────────────────────────────────────── */
+.dark {
+  /* Semantic surface tokens */
+  --surface: #060A09;
+  --surface-2: #0F1714;
+  --panel: rgba(255, 255, 255, 0.04);
+  --content: #E9F1EB;
+  --content-muted: rgba(233, 241, 235, 0.66);
+  --hairline: rgba(233, 241, 235, 0.12);
+  --accent-ink: #18E27B;
+  --accent-2-ink: #1FE3CF;
+  color-scheme: dark;
+
+  /* shadcn / Radix vars — dark values (original) */
   --background: #060A09;
   --foreground: #E9F1EB;
   --card: #F2F6F1;
@@ -61,7 +122,6 @@
   --border: rgba(233, 241, 235, 0.12);
   --input: rgba(233, 241, 235, 0.14);
   --ring: #18E27B;
-  --radius: 0.75rem;
 }
 
 @layer base {
@@ -71,12 +131,11 @@
 
   html {
     scroll-behavior: smooth;
-    color-scheme: dark;
     scroll-padding-top: 6rem;
   }
 
   body {
-    @apply bg-ink text-mist font-sans antialiased;
+    @apply bg-surface text-content font-sans antialiased;
   }
 
   ::selection {
@@ -89,7 +148,7 @@
   input,
   select,
   textarea {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-energy focus-visible:ring-offset-2 focus-visible:ring-offset-ink;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-energy focus-visible:ring-offset-2 focus-visible:ring-offset-surface;
     touch-action: manipulation;
   }
 
@@ -104,7 +163,15 @@
   @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
 }
 
+/* text-gradient: light = darker green→teal; dark = bright brand gradient */
 .text-gradient {
+  background: linear-gradient(135deg, #047857, #0E7490);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dark .text-gradient {
   background: linear-gradient(135deg, #18E27B, #5DFFA8, #1FE3CF);
   -webkit-background-clip: text;
   background-clip: text;
@@ -115,16 +182,27 @@
   background: linear-gradient(135deg, #18E27B, #5DFFA8, #1FE3CF);
 }
 
+/* glass-surface: uses hairline + panel tokens — works in both themes */
 .glass-surface {
-  @apply border border-white/10 bg-white/5 backdrop-blur-xl;
+  border: 1px solid var(--hairline);
+  background-color: var(--panel);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }
 
 .premium-panel {
-  @apply border border-white/10 bg-white/[0.055] backdrop-blur-2xl shadow-[0_1.5rem_5rem_rgba(0,0,0,0.24)];
+  border: 1px solid var(--hairline);
+  background-color: var(--panel);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  box-shadow: 0 1.5rem 5rem rgba(0, 0, 0, 0.24);
 }
 
+/* light-panel: editorial panel style — light bg with subtle shadow */
 .light-panel {
-  @apply border border-ink-soft/10 bg-white shadow-[0_1.25rem_3.5rem_rgba(10,15,13,0.08)];
+  border: 1px solid var(--hairline);
+  background-color: var(--surface);
+  box-shadow: 0 1.25rem 3.5rem rgba(10, 15, 13, 0.08);
 }
 
 .section-rim {

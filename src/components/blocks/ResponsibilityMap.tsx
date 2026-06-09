@@ -6,7 +6,7 @@ import { Person } from "@/content";
 
 export function ResponsibilityMap({ people, responsibilities }: { people: Person[]; responsibilities: string[] }) {
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:p-10">
+    <div className="relative overflow-hidden rounded-3xl border border-hairline bg-panel p-6 md:p-10">
       {/* Desktop: computed-position hub-and-spoke */}
       <div className="hidden lg:block">
         <DesktopMap people={people} responsibilities={responsibilities} />
@@ -15,9 +15,9 @@ export function ResponsibilityMap({ people, responsibilities }: { people: Person
       {/* Mobile: stacked fallback */}
       <div className="grid gap-3 sm:grid-cols-2 lg:hidden">
         {people.map((person) => (
-          <div key={person.slug} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="font-semibold text-mist">{person.name}</p>
-            <p className="mt-1 text-sm text-energy">{person.responsibility}</p>
+          <div key={person.slug} className="rounded-2xl border border-hairline bg-panel p-4">
+            <p className="font-semibold text-content">{person.name}</p>
+            <p className="mt-1 text-sm text-accent-ink">{person.responsibility}</p>
           </div>
         ))}
       </div>
@@ -34,27 +34,19 @@ function DesktopMap({ people, responsibilities }: { people: Person[]; responsibi
   const pCount = people.length;
   const rCount = responsibilities.length;
 
-  // Percentage-based vertical positions for each person and responsibility.
-  // Cards are absolutely positioned; SVG uses the same math so endpoints always align.
   const personYs = Array.from({ length: pCount }, (_, i) => ((i + 0.5) / pCount) * 100);
   const respYs = Array.from({ length: rCount }, (_, i) => ((i + 0.5) / rCount) * 100);
 
-  // SVG coordinate system: x in [0,100], y in [0,100] (percentages via preserveAspectRatio=none)
-  // Left card right-anchor: x=22 (card ends roughly here in percentage)
-  // Right card left-anchor: x=78
-  // Hub spine x: 50
   const leftAnchorX = 23;
   const rightAnchorX = 77;
   const hubX = 50;
 
-  // Hub node Y is the vertical midpoint of all people
   const hubY = pCount > 0 ? personYs.reduce((a, b) => a + b, 0) / pCount : 50;
 
   const shouldDraw = reduce || inView;
 
   return (
     <div ref={ref} className="relative" style={{ minHeight: "32rem" }}>
-      {/* SVG connector layer — sits behind the cards */}
       <svg
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
@@ -69,7 +61,6 @@ function DesktopMap({ people, responsibilities }: { people: Person[]; responsibi
           </linearGradient>
         </defs>
 
-        {/* People → hub paths */}
         {personYs.map((py, i) => {
           const d = `M${leftAnchorX} ${py} C${(leftAnchorX + hubX) / 2} ${py} ${(leftAnchorX + hubX) / 2} ${hubY} ${hubX} ${hubY}`;
           return (
@@ -87,7 +78,6 @@ function DesktopMap({ people, responsibilities }: { people: Person[]; responsibi
           );
         })}
 
-        {/* Hub → responsibility paths */}
         {respYs.map((ry, i) => {
           const d = `M${hubX} ${hubY} C${(hubX + rightAnchorX) / 2} ${hubY} ${(hubX + rightAnchorX) / 2} ${ry} ${rightAnchorX} ${ry}`;
           return (
@@ -105,7 +95,6 @@ function DesktopMap({ people, responsibilities }: { people: Person[]; responsibi
           );
         })}
 
-        {/* Hub node */}
         <motion.circle
           cx={hubX}
           cy={hubY}
@@ -125,11 +114,11 @@ function DesktopMap({ people, responsibilities }: { people: Person[]; responsibi
             className="absolute -translate-y-1/2"
             style={{ top: `${personYs[i]}%`, left: 0, right: 0 }}
           >
-            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-ink px-3 py-2">
+            <div className="flex items-center gap-2 rounded-full border border-hairline bg-surface px-3 py-2">
               <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-energy to-cyan text-xs font-bold text-ink">
                 {person.initials}
               </span>
-              <span className="truncate text-xs font-semibold text-mist">{person.name}</span>
+              <span className="truncate text-xs font-semibold text-content">{person.name}</span>
             </div>
           </div>
         ))}
@@ -143,7 +132,7 @@ function DesktopMap({ people, responsibilities }: { people: Person[]; responsibi
             className="absolute -translate-y-1/2"
             style={{ top: `${respYs[i]}%`, left: 0, right: 0 }}
           >
-            <div className="rounded-xl border border-white/10 bg-ink/80 px-3 py-2.5 text-xs text-mist/75 leading-snug">
+            <div className="rounded-xl border border-hairline bg-panel px-3 py-2.5 text-xs text-content-muted leading-snug">
               {item}
             </div>
           </div>

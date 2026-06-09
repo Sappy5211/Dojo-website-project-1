@@ -3,15 +3,6 @@
 import { motion, useReducedMotion } from "motion/react";
 import { DUR, EASE_OUT, STAGGER, VIEWPORT } from "@/lib/motion";
 
-const THEME_ICONS: Record<string, string> = {
-  Decarbonisation: "⬡",
-  "Asset resilience": "⬡",
-  "Data quality": "⬡",
-  "AI adoption": "⬡",
-  Regulation: "⬡",
-  "Capital delivery": "⬡",
-};
-
 export function SectorThemes({ themes }: { themes: string[] }) {
   const reduce = useReducedMotion();
 
@@ -51,7 +42,7 @@ export function SectorThemes({ themes }: { themes: string[] }) {
                 aria-hidden
               />
             </div>
-            <span className="group relative flex items-center gap-2 rounded-full border border-energy/20 bg-white/5 px-5 py-2.5 text-sm font-medium text-mist/80 backdrop-blur-sm transition-colors hover:border-energy/50 hover:bg-energy/10 hover:text-energy lg:mx-2">
+            <span className="group relative flex items-center gap-2 rounded-full border border-hairline bg-panel px-5 py-2.5 text-sm font-medium text-content-muted transition-colors hover:border-energy/50 hover:bg-energy/10 hover:text-accent-ink lg:mx-2">
               {theme}
             </span>
           </motion.li>

@@ -9,7 +9,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-// Blur + lift + fade reveal, staggered, reduced-motion aware.
 function AnimatedContainer({
   className,
   delay = 0.1,
@@ -37,8 +36,9 @@ function AnimatedContainer({
 export function Footer() {
   const year = new Date().getFullYear();
 
+  // Footer is always dark — wrap in `dark` class so semantic tokens resolve to dark values
   return (
-    <footer className="relative overflow-hidden border-t border-white/10 bg-ink text-mist">
+    <footer className="dark relative overflow-hidden border-t border-white/10 bg-ink text-mist">
       {/* top centre glow line */}
       <div className="absolute left-1/2 top-0 h-px w-1/3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-energy/40 blur-sm" aria-hidden />
 

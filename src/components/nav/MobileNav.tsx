@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { nav } from "@/content";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function MobileNav({
   open,
@@ -57,7 +58,7 @@ export function MobileNav({
   return (
     <motion.div
       ref={panelRef}
-      className="fixed inset-0 z-40 bg-ink/98 px-6 pt-28 backdrop-blur-xl lg:hidden"
+      className="fixed inset-0 z-40 bg-surface/98 px-6 pt-28 backdrop-blur-xl lg:hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -80,8 +81,8 @@ export function MobileNav({
                   href={item.href}
                   onClick={onClose}
                   className={cn(
-                    "block border-b border-white/5 py-5 text-2xl font-semibold",
-                    active ? "text-energy" : "text-mist/80"
+                    "block border-b border-hairline py-5 text-2xl font-semibold",
+                    active ? "text-accent-ink" : "text-content/80"
                   )}
                 >
                   {item.label}
@@ -89,6 +90,17 @@ export function MobileNav({
               </motion.div>
             );
           })}
+
+          {/* Theme toggle at bottom of mobile nav */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: nav.length * 0.06 + 0.06 }}
+            className="mt-6 flex items-center gap-3"
+          >
+            <ThemeToggle />
+            <span className="text-sm text-content-muted">Toggle theme</span>
+          </motion.div>
         </div>
       </div>
     </motion.div>

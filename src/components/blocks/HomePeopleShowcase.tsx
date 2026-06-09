@@ -48,7 +48,7 @@ export function HomePeopleShowcase({ people }: { people: Person[] }) {
         {people.map((person) => (
           <PeopleNameRow key={person.slug} person={person} hoveredSlug={hoveredSlug} onHover={setHoveredSlug} />
         ))}
-        <Link href="/people" className="inline-flex w-fit items-center gap-2 pt-2 font-semibold text-energy transition-colors duration-200 hover:text-cyan">
+        <Link href="/people" className="inline-flex w-fit items-center gap-2 pt-2 font-semibold text-accent-ink transition-colors duration-200 hover:text-accent-2-ink">
           {ui.labels.people}
           <ExternalLink size={16} aria-hidden />
         </Link>
@@ -75,6 +75,7 @@ function PeoplePhotoTile({
     <button
       type="button"
       className={cn(
+        // Photo tiles intentionally stay dark — they are immersive photo cards
         "group relative shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-ink-soft text-left shadow-[0_1.25rem_3rem_rgba(6,10,9,0.45)] transition-[opacity,transform,border-color] duration-300 hover:-translate-y-1 hover:border-energy/45 focus-visible:-translate-y-1",
         className,
         isDimmed ? "opacity-55" : "opacity-100",
@@ -119,15 +120,15 @@ function PeopleNameRow({
       onMouseLeave={() => onHover(null)}
     >
       <div className="flex items-center gap-3">
-        <span className={cn("h-3 w-4 rounded-[5px] bg-white/10 transition-[width,background-color] duration-300", isActive && "w-6 bg-energy")} />
-        <h3 className={cn("text-lg font-semibold leading-none tracking-tight transition-colors duration-300", isActive ? "text-mist" : "text-mist/70")}>{person.name}</h3>
-        <a href={person.linkedin} aria-label={`${person.name} LinkedIn`} className={cn("ml-0.5 rounded-full p-1 text-mist/40 transition-[transform,opacity,color,background-color] duration-200 hover:bg-white/10 hover:text-energy", isActive ? "translate-x-0 opacity-100" : "-translate-x-1 opacity-0")}>
+        <span className={cn("h-3 w-4 rounded-[5px] bg-hairline transition-[width,background-color] duration-300", isActive && "w-6 bg-energy")} />
+        <h3 className={cn("text-lg font-semibold leading-none tracking-tight transition-colors duration-300", isActive ? "text-content" : "text-content-muted")}>{person.name}</h3>
+        <a href={person.linkedin} aria-label={`${person.name} LinkedIn`} className={cn("ml-0.5 rounded-full p-1 text-content-muted transition-[transform,opacity,color,background-color] duration-200 hover:bg-panel hover:text-accent-ink", isActive ? "translate-x-0 opacity-100" : "-translate-x-1 opacity-0")}>
           <ExternalLink size={13} />
         </a>
       </div>
-      <p className="mt-2 pl-7 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-mist/50">{person.role}</p>
-      <p className="mt-3 max-w-md pl-7 text-sm leading-relaxed text-mist/60">{person.specialism}</p>
-      <div className="mt-4 border-t border-white/10 pl-0" />
+      <p className="mt-2 pl-7 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-content-muted">{person.role}</p>
+      <p className="mt-3 max-w-md pl-7 text-sm leading-relaxed text-content-muted">{person.specialism}</p>
+      <div className="mt-4 border-t border-hairline pl-0" />
     </div>
   );
 }

@@ -17,9 +17,8 @@ export const metadata: Metadata = {
 export default function SectorsPage() {
   return (
     <>
-      {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-ink pt-36 text-mist">
-        {/* subtle background current */}
+      {/* ── Hero (always dark) ───────────────────────────────── */}
+      <section className="dark relative overflow-hidden bg-ink pt-36 text-mist">
         <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-[0.12]" aria-hidden>
           <CurrentLine
             className="absolute left-1/2 top-0 h-full w-[36rem] -translate-x-1/2"
@@ -45,7 +44,7 @@ export default function SectorsPage() {
             {sectors.landing.hero.intro}
           </p>
 
-          {/* sector grid */}
+          {/* sector grid — editorial SectorCard inside a dark hero; they will resolve dark via inheritance */}
           <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {sectors.sectorList.map((sector) => (
               <SectorCard key={sector.slug} sector={sector} />
@@ -54,8 +53,8 @@ export default function SectorsPage() {
         </div>
       </section>
 
-      {/* ── Cross-themes ─────────────────────────────────── */}
-      <section className="bg-ink-soft py-24 text-mist lg:py-32">
+      {/* ── Cross-themes (editorial — flips) ─────────────────── */}
+      <section className="bg-surface-2 py-24 lg:py-32">
         <div className="container-eneriq">
           <SectionHeader
             title={ui.sectorsSections.themesTitle}
@@ -65,8 +64,8 @@ export default function SectorsPage() {
         </div>
       </section>
 
-      {/* ── Decision map ─────────────────────────────────── */}
-      <section className="bg-ink py-24 text-mist lg:py-32">
+      {/* ── Decision map (editorial — flips) ─────────────────── */}
+      <section className="bg-surface py-24 lg:py-32">
         <div className="container-eneriq">
           <SectionHeader
             title={ui.sectorsSections.decisionTitle}
@@ -76,6 +75,7 @@ export default function SectorsPage() {
         </div>
       </section>
 
+      {/* ── CTA (always dark) ─────────────────────────────────── */}
       <CTABand {...home.closingCTA} />
     </>
   );

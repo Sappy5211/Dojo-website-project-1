@@ -8,6 +8,7 @@ import { ChevronDown, Menu, X } from "lucide-react";
 import { brand, home, nav, sectors, whatWeDo } from "@/content";
 import { cn } from "@/lib/utils";
 import { MobileNav } from "./MobileNav";
+import { ThemeToggle } from "./ThemeToggle";
 
 type SubItem = { label: string; href: string; desc?: string };
 type NavEntry = { label: string; href: string; submenu?: SubItem[]; kind?: "description" | "simple" };
@@ -91,7 +92,7 @@ export function SiteNav() {
         ref={navRef}
         className={cn(
           "fixed inset-x-0 top-0 z-50 h-[72px] transition-[background-color,border-color,backdrop-filter] duration-300",
-          scrolled || openMenu ? "border-b border-white/10 bg-ink/90 backdrop-blur-md" : "bg-transparent"
+          scrolled || openMenu ? "border-b border-hairline bg-surface/90 backdrop-blur-md" : "bg-transparent"
         )}
       >
         <div className="container-eneriq relative flex h-full items-center justify-between">
@@ -100,7 +101,7 @@ export function SiteNav() {
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-energy via-energy-bright to-cyan text-sm font-bold text-ink shadow-[0_0_24px_rgba(16,185,129,0.28)]">
               S
             </span>
-            <span className="text-lg font-semibold tracking-[0.18em]">{brand.name}</span>
+            <span className="text-lg font-semibold tracking-[0.18em] text-content">{brand.name}</span>
           </Link>
 
           {/* Centred tubelight pill */}
@@ -203,6 +204,8 @@ export function SiteNav() {
 
           {/* Right side */}
           <div className="flex items-center gap-3">
+            {/* ThemeToggle — desktop: always visible; mobile: shown alongside hamburger */}
+            <ThemeToggle />
             <Link
               href={home.hero.primary.href}
               className="cta-lift hidden rounded-full bg-gradient-to-r from-energy via-energy-bright to-cyan px-5 py-2.5 text-sm font-semibold text-ink shadow-[0_0.75rem_2rem_rgba(16,185,129,0.2)] lg:inline-flex"
@@ -211,7 +214,7 @@ export function SiteNav() {
             </Link>
             <button
               ref={toggleRef}
-              className="grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-white/5 text-mist lg:hidden"
+              className="grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-white/5 text-content lg:hidden"
               type="button"
               aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
               aria-expanded={mobileOpen}

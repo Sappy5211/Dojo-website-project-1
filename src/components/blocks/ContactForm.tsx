@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { contact, sectors, ui } from "@/content";
 
-// Routing-option icon names aligned with content order
 const ROUTING_ICONS = ["Compass", "BrainCircuit", "Landmark", "Network"] as const;
 
 const STAGGER_BASE = 0.07;
@@ -67,7 +66,7 @@ export function ContactForm() {
                 glowColor="green"
                 className={
                   selected
-                    ? "ring-2 ring-energy/60 ring-offset-1 ring-offset-ink"
+                    ? "ring-2 ring-energy/60 ring-offset-1 ring-offset-surface"
                     : ""
                 }
               >
@@ -76,13 +75,13 @@ export function ContactForm() {
                   role="radio"
                   aria-checked={selected}
                   onClick={() => setArea(option)}
-                  className="flex w-full items-center gap-4 rounded-2xl p-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-energy focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+                  className="flex w-full items-center gap-4 rounded-2xl p-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-energy focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
                 >
                   <span
                     className={
                       selected
-                        ? "text-energy"
-                        : "text-mist/40"
+                        ? "text-accent-ink"
+                        : "text-content-muted"
                     }
                     aria-hidden
                   >
@@ -91,8 +90,8 @@ export function ContactForm() {
                   <span
                     className={
                       selected
-                        ? "text-sm font-semibold text-mist"
-                        : "text-sm text-mist/60"
+                        ? "text-sm font-semibold text-content"
+                        : "text-sm text-content-muted"
                     }
                   >
                     {option}
@@ -109,7 +108,7 @@ export function ContactForm() {
 
       {/* ── Form ───────────────────────────────────────────────── */}
       <motion.form
-        className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 md:p-8"
+        className="rounded-3xl border border-hairline bg-panel p-6 md:p-8"
         onSubmit={handleSubmit}
         noValidate
         initial={reduce ? {} : { opacity: 0, y: 20 }}
@@ -130,9 +129,9 @@ export function ContactForm() {
         <div className="grid gap-5 md:grid-cols-2">
           {/* Name */}
           <div>
-            <Label htmlFor="name" className="mb-2 block text-sm font-medium text-mist/80">
+            <Label htmlFor="name" className="mb-2 block text-sm font-medium text-content-muted">
               {contact.formFields.name}{" "}
-              <span className="text-energy" aria-label={ui.labels.required}>*</span>
+              <span className="text-accent-ink" aria-label={ui.labels.required}>*</span>
             </Label>
             <Input
               ref={nameRef}
@@ -144,7 +143,7 @@ export function ContactForm() {
               aria-required="true"
               aria-invalid={Boolean(errors.name)}
               aria-describedby={errors.name ? "name-error" : undefined}
-              className="min-h-11 border-white/10 bg-ink/60 text-mist placeholder:text-mist/30 focus-visible:ring-energy"
+              className="min-h-11 border-hairline bg-surface text-content placeholder:text-content-muted focus-visible:ring-energy"
             />
             {errors.name && (
               <p id="name-error" role="alert" className="mt-1.5 text-xs text-amber">
@@ -155,7 +154,7 @@ export function ContactForm() {
 
           {/* Organisation */}
           <div>
-            <Label htmlFor="organisation" className="mb-2 block text-sm font-medium text-mist/80">
+            <Label htmlFor="organisation" className="mb-2 block text-sm font-medium text-content-muted">
               {contact.formFields.organisation}
             </Label>
             <Input
@@ -164,15 +163,15 @@ export function ContactForm() {
               type="text"
               autoComplete="organization"
               placeholder={`${contact.formFields.organisation}…`}
-              className="min-h-11 border-white/10 bg-ink/60 text-mist placeholder:text-mist/30 focus-visible:ring-energy"
+              className="min-h-11 border-hairline bg-surface text-content placeholder:text-content-muted focus-visible:ring-energy"
             />
           </div>
 
           {/* Email */}
           <div>
-            <Label htmlFor="email" className="mb-2 block text-sm font-medium text-mist/80">
+            <Label htmlFor="email" className="mb-2 block text-sm font-medium text-content-muted">
               {contact.formFields.email}{" "}
-              <span className="text-energy" aria-label={ui.labels.required}>*</span>
+              <span className="text-accent-ink" aria-label={ui.labels.required}>*</span>
             </Label>
             <Input
               ref={emailRef}
@@ -185,7 +184,7 @@ export function ContactForm() {
               aria-required="true"
               aria-invalid={Boolean(errors.email)}
               aria-describedby={errors.email ? "email-error" : undefined}
-              className="min-h-11 border-white/10 bg-ink/60 text-mist placeholder:text-mist/30 focus-visible:ring-energy"
+              className="min-h-11 border-hairline bg-surface text-content placeholder:text-content-muted focus-visible:ring-energy"
             />
             {errors.email && (
               <p id="email-error" role="alert" className="mt-1.5 text-xs text-amber">
@@ -196,14 +195,14 @@ export function ContactForm() {
 
           {/* Sector */}
           <div>
-            <Label htmlFor="sector" className="mb-2 block text-sm font-medium text-mist/80">
+            <Label htmlFor="sector" className="mb-2 block text-sm font-medium text-content-muted">
               {contact.formFields.sector}
             </Label>
             <select
               id="sector"
               name="sector"
               autoComplete="off"
-              className="mt-0 min-h-11 w-full rounded-md border border-white/10 bg-ink/60 px-3 py-2 text-sm text-mist focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-energy focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+              className="mt-0 min-h-11 w-full rounded-md border border-hairline bg-surface px-3 py-2 text-sm text-content focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-energy focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
             >
               {sectors.sectorList.map((sector) => (
                 <option key={sector.slug} value={sector.slug}>
@@ -215,7 +214,7 @@ export function ContactForm() {
 
           {/* Area of interest */}
           <div className="md:col-span-2">
-            <Label htmlFor="area" className="mb-2 block text-sm font-medium text-mist/80">
+            <Label htmlFor="area" className="mb-2 block text-sm font-medium text-content-muted">
               {contact.formFields.area}
             </Label>
             <select
@@ -224,7 +223,7 @@ export function ContactForm() {
               value={area}
               autoComplete="off"
               onChange={(e) => setArea(e.target.value)}
-              className="mt-0 min-h-11 w-full rounded-md border border-white/10 bg-ink/60 px-3 py-2 text-sm text-mist focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-energy focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+              className="mt-0 min-h-11 w-full rounded-md border border-hairline bg-surface px-3 py-2 text-sm text-content focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-energy focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
             >
               {contact.routingOptions.map((option) => (
                 <option key={option} value={option}>
@@ -236,9 +235,9 @@ export function ContactForm() {
 
           {/* Message */}
           <div className="md:col-span-2">
-            <Label htmlFor="message" className="mb-2 block text-sm font-medium text-mist/80">
+            <Label htmlFor="message" className="mb-2 block text-sm font-medium text-content-muted">
               {contact.formFields.message}{" "}
-              <span className="text-energy" aria-label={ui.labels.required}>*</span>
+              <span className="text-accent-ink" aria-label={ui.labels.required}>*</span>
             </Label>
             <Textarea
               ref={messageRef}
@@ -250,7 +249,7 @@ export function ContactForm() {
               aria-required="true"
               aria-invalid={Boolean(errors.message)}
               aria-describedby={errors.message ? "message-error" : undefined}
-              className="min-h-36 border-white/10 bg-ink/60 text-mist placeholder:text-mist/30 focus-visible:ring-energy"
+              className="min-h-36 border-hairline bg-surface text-content placeholder:text-content-muted focus-visible:ring-energy"
             />
             {errors.message && (
               <p id="message-error" role="alert" className="mt-1.5 text-xs text-amber">
@@ -263,7 +262,7 @@ export function ContactForm() {
         {/* Success */}
         {sent && (
           <p
-            className="mt-5 rounded-2xl border border-energy/30 bg-energy/10 px-4 py-3 text-sm text-energy"
+            className="mt-5 rounded-2xl border border-energy/30 bg-energy/10 px-4 py-3 text-sm text-accent-ink"
             role="status"
             aria-live="polite"
           >
@@ -271,10 +270,10 @@ export function ContactForm() {
           </p>
         )}
 
-        {/* Submit — always enabled, dark text on green */}
+        {/* Submit — always dark text on green fill */}
         <Button
           type="submit"
-          className="cta-lift mt-6 min-h-11 rounded-full bg-gradient-to-r from-energy via-energy-bright to-cyan px-7 font-semibold text-ink hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-energy focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+          className="cta-lift mt-6 min-h-11 rounded-full bg-gradient-to-r from-energy via-energy-bright to-cyan px-7 font-semibold text-ink hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-energy focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
         >
           {contact.formFields.submit}
         </Button>
