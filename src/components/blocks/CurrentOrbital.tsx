@@ -1,18 +1,5 @@
 "use client";
 
-/**
- * "The Current" orbital — a rotating node diagram of energy → data → AI → implementation.
- *
- * Controlled: the parent owns the `active` node state so an external panel + stepper can show
- * the description and stay in sync. Faithful to the intended RadialOrbitalTimeline (orbiting
- * nodes, click/hover to activate, neighbours pulse) but rebuilt for performance:
- *  - Rotation driven by requestAnimationFrame writing transforms straight to the DOM via refs
- *    (the donor's setInterval + setState every 50ms was the lag pattern).
- *  - Rotation pauses while the user is engaging (`paused`) so nodes become easy static targets,
- *    and off-screen via IntersectionObserver. Static on prefers-reduced-motion.
- *  - Brand green→cyan, no fake metrics. Data comes from content.ts.
- */
-
 import { useEffect, useRef } from "react";
 import { IconGlyph } from "@/components/blocks/IconGlyph";
 import { home } from "@/content";
@@ -23,17 +10,11 @@ export function CurrentOrbital({
   active,
   setActive,
   paused = false,
-  radiusFactor = 0.36,
-  centerClassName = "",
   className = "",
 }: {
   active: number | null;
   setActive: (updater: number | null | ((current: number | null) => number | null)) => void;
   paused?: boolean;
-  /** Orbit radius as a fraction of the widget width. Larger = orbs sit nearer the edge. */
-  radiusFactor?: number;
-  /** Extra classes on the centre nucleus (e.g. `lg:hidden` when content sits at the centre). */
-  centerClassName?: string;
   className?: string;
 }) {
   const nodes = home.hero.diagram.nodes;
@@ -44,18 +25,9 @@ export function CurrentOrbital({
   const angleRef = useRef(0);
   const pausedRef = useRef(paused);
   const activeRef = useRef<number | null>(null);
-  const radiusRef = useRef(radiusFactor);
 
-  // Mirror props into refs so the rAF loop reads fresh values without re-subscribing.
-  useEffect(() => {
-    activeRef.current = active;
-  }, [active]);
-  useEffect(() => {
-    pausedRef.current = paused;
-  }, [paused]);
-  useEffect(() => {
-    radiusRef.current = radiusFactor;
-  }, [radiusFactor]);
+  useEffect(() => { activeRef.current = active; }, [active]);
+  useEffect(() => { pausedRef.current = paused; }, [paused]);
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -65,7 +37,7 @@ export function CurrentOrbital({
     const apply = () => {
       const wrap = wrapRef.current;
       if (!wrap) return;
-      const radius = wrap.clientWidth * radiusRef.current;
+      const radius = wrap.clientWidth * 0.38;
       for (let i = 0; i < total; i++) {
         const el = nodeRefs.current[i];
         if (!el) continue;
@@ -113,15 +85,15 @@ export function CurrentOrbital({
         <div className="absolute inset-[8%] rounded-full border border-white/10" aria-hidden />
         <div className="absolute inset-[26%] rounded-full border border-white/[0.06]" aria-hidden />
 
-        {/* Centre */}
-        <div className={`absolute left-1/2 top-1/2 z-[40] -translate-x-1/2 -translate-y-1/2 ${centerClassName}`}>
-          <div className="relative grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-energy via-energy-bright to-cyan shadow-[0_0_32px_rgba(16,185,129,0.4)]">
-            <span className="text-[11px] font-bold tracking-[0.15em] text-ink">ENIRIQ</span>
+        {/* Centre nucleus */}
+        <div className="absolute left-1/2 top-1/2 z-[40] -translate-x-1/2 -translate-y-1/2">
+          <div className="relative grid h-16 w-16 place-items-center rounded-full bg-gradient-to-br from-energy via-energy-bright to-cyan shadow-[0_0_32px_rgba(16,185,129,0.4)]">
+            <span className="text-[10px] font-bold tracking-[0.15em] text-ink">ENIRIQ</span>
             <span className="absolute inset-0 animate-ping rounded-full bg-energy/20" aria-hidden />
           </div>
         </div>
 
-        {/* Orbiting nodes — positioned by rAF via refs */}
+        {/* Orbiting nodes */}
         {nodes.map((node, i) => {
           const isActive = active === i;
           return (
@@ -133,7 +105,7 @@ export function CurrentOrbital({
               aria-pressed={isActive}
               onMouseEnter={() => setActive(i)}
               onFocus={() => setActive(i)}
-              onClick={(event) => { event.stopPropagation(); setActive(i); }}
+              onClick={(e) => { e.stopPropagation(); setActive(i); }}
               className="absolute left-1/2 top-1/2 rounded-full will-change-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-energy focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
             >
               <span
