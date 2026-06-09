@@ -23,7 +23,7 @@ export function ResponsibilityMap({ people, responsibilities }: { people: Person
         <div className="absolute left-10 top-12 space-y-16">
           {people.map((person) => (
             <div key={person.slug} className="flex items-center gap-3 rounded-full border border-white/10 bg-ink px-4 py-3">
-              <span className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-energy to-cyan text-sm font-bold text-white">{person.initials}</span>
+              <span className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-energy to-cyan text-sm font-bold text-ink">{person.initials}</span>
               <span>{person.name}</span>
             </div>
           ))}

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { CTABand } from "@/components/blocks/CTABand";
 import { SectionHeader } from "@/components/blocks/SectionHeader";
 import { SectorCard } from "@/components/blocks/SectorCard";
+import { SectorThemes } from "@/components/blocks/SectorThemes";
+import { SectorDecisionMap } from "@/components/blocks/SectorDecisionMap";
 import { CurrentLine } from "@/components/fx/CurrentLine";
 import { home, meta, sectors, ui } from "@/content";
 
@@ -15,40 +17,62 @@ export const metadata: Metadata = {
 export default function SectorsPage() {
   return (
     <>
-      <section className="bg-ink pt-36 text-mist">
-        <div className="container-eneriq py-24">
-          <SectionHeader eyebrow={ui.sectorsSections.eyebrow} title={sectors.landing.hero.title} intro={sectors.landing.hero.intro} />
-          <div className="relative mt-12">
-            <CurrentLine className="pointer-events-none absolute left-1/2 top-0 hidden h-full w-80 -translate-x-1/2 opacity-40 lg:block" viewBox="0 0 220 520" d="M110 20 C20 100 30 200 70 250 M110 20 C210 120 190 220 150 250 M110 20 C100 210 120 360 110 500" />
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {sectors.sectorList.map((sector) => <SectorCard key={sector.slug} sector={sector} />)}
-            </div>
-          </div>
+      {/* ── Hero ─────────────────────────────────────────── */}
+      <section className="relative overflow-hidden bg-ink pt-36 text-mist">
+        {/* subtle background current */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-[0.12]" aria-hidden>
+          <CurrentLine
+            className="absolute left-1/2 top-0 h-full w-[36rem] -translate-x-1/2"
+            viewBox="0 0 200 800"
+            d="M30 0 C130 80 70 200 150 310 C50 430 110 530 160 680 C100 730 60 770 170 800"
+            nodes={[
+              { x: 30, y: 0 },
+              { x: 150, y: 310 },
+              { x: 160, y: 680 },
+            ]}
+            width={1.2}
+          />
         </div>
-      </section>
 
-      <section className="bg-paper py-24 text-ink-soft lg:py-32">
-        <div className="container-eneriq">
-          <SectionHeader title={ui.sectorsSections.themesTitle} intro={ui.sectorsSections.themesIntro} light />
-          <div className="flex flex-wrap gap-3">
-            {sectors.landing.crossThemes.map((theme) => (
-              <span key={theme} className="rounded-full border border-ink-soft/10 bg-white px-4 py-2 text-sm text-ink-soft/75">{theme}</span>
+        <div className="container-eneriq relative z-10 py-24">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-energy">
+            {ui.sectorsSections.eyebrow}
+          </p>
+          <h1 className="max-w-4xl text-[clamp(2.5rem,6vw,4.5rem)] font-semibold leading-[1.05] tracking-tight">
+            {sectors.landing.hero.title}
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-mist/70">
+            {sectors.landing.hero.intro}
+          </p>
+
+          {/* sector grid */}
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {sectors.sectorList.map((sector) => (
+              <SectorCard key={sector.slug} sector={sector} />
             ))}
           </div>
         </div>
       </section>
 
+      {/* ── Cross-themes ─────────────────────────────────── */}
+      <section className="bg-ink-soft py-24 text-mist lg:py-32">
+        <div className="container-eneriq">
+          <SectionHeader
+            title={ui.sectorsSections.themesTitle}
+            intro={ui.sectorsSections.themesIntro}
+          />
+          <SectorThemes themes={sectors.landing.crossThemes} />
+        </div>
+      </section>
+
+      {/* ── Decision map ─────────────────────────────────── */}
       <section className="bg-ink py-24 text-mist lg:py-32">
         <div className="container-eneriq">
-          <SectionHeader title={ui.sectorsSections.decisionTitle} intro={ui.sectorsSections.decisionIntro} />
-          <div className="grid gap-6 md:grid-cols-3">
-            {sectors.landing.decisionMap.map((decision, index) => (
-              <article key={`decision-${index}`} className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <h3 className="font-semibold">{decision.title}</h3>
-                <p className="mt-3 text-sm text-mist/68">{decision.desc}</p>
-              </article>
-            ))}
-          </div>
+          <SectionHeader
+            title={ui.sectorsSections.decisionTitle}
+            intro={ui.sectorsSections.decisionIntro}
+          />
+          <SectorDecisionMap decisions={sectors.landing.decisionMap} />
         </div>
       </section>
 

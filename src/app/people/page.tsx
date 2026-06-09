@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { CTABand } from "@/components/blocks/CTABand";
-import { FocusAreaCard } from "@/components/blocks/FocusAreaCard";
-import { PersonCard } from "@/components/blocks/PersonCard";
+import { IconGlyph } from "@/components/blocks/IconGlyph";
+import { PersonGlowCard } from "@/components/blocks/PersonGlowCard";
 import { ResponsibilityMap } from "@/components/blocks/ResponsibilityMap";
 import { SectionHeader } from "@/components/blocks/SectionHeader";
+import { GlowCard } from "@/components/fx/GlowCard";
 import { CurrentBackground } from "@/components/fx/CurrentBackground";
 import { home, meta, people, ui } from "@/content";
 
@@ -24,15 +25,19 @@ export default function PeoplePage() {
         </div>
       </section>
 
-      <section className="bg-paper py-24 text-ink-soft lg:py-32">
+      {/* Leadership — photo-fill glow cards */}
+      <section className="bg-ink py-24 text-mist lg:py-32">
         <div className="container-eneriq">
-          <SectionHeader title={ui.peopleSections.leadershipTitle} intro={ui.peopleSections.leadershipIntro} light />
+          <SectionHeader title={ui.peopleSections.leadershipTitle} intro={ui.peopleSections.leadershipIntro} />
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {people.leadership.map((person) => <PersonCard key={person.slug} person={person} light />)}
+            {people.leadership.map((person) => (
+              <PersonGlowCard key={person.slug} person={person} />
+            ))}
           </div>
         </div>
       </section>
 
+      {/* Areas of responsibility */}
       <section className="bg-ink py-24 text-mist lg:py-32">
         <div className="container-eneriq">
           <SectionHeader title={ui.peopleSections.responsibilityTitle} intro={ui.peopleSections.responsibilityIntro} />
@@ -40,12 +45,19 @@ export default function PeoplePage() {
         </div>
       </section>
 
-      <section className="bg-paper py-24 text-ink-soft lg:py-32">
+      {/* Decision-making philosophy — glow cards */}
+      <section className="bg-ink py-24 text-mist lg:py-32">
         <div className="container-eneriq">
-          <SectionHeader title={ui.peopleSections.philosophyTitle} intro={ui.peopleSections.philosophyIntro} light />
+          <SectionHeader title={ui.peopleSections.philosophyTitle} intro={ui.peopleSections.philosophyIntro} />
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {people.philosophy.map((item) => (
-              <FocusAreaCard key={item.title} area={{ title: item.title, desc: item.desc, icon: item.icon }} light />
+              <GlowCard key={item.title} className="h-full p-6">
+                <div className="mb-5 grid h-11 w-11 place-items-center rounded-2xl bg-energy/10 text-energy">
+                  <IconGlyph name={item.icon} />
+                </div>
+                <h3 className="text-lg font-semibold text-mist">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-mist/65">{item.desc}</p>
+              </GlowCard>
             ))}
           </div>
         </div>
