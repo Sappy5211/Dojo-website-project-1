@@ -6,7 +6,7 @@ import { flags, insights, meta, ui } from "@/content";
 export const metadata: Metadata = {
   title: meta.insights.title,
   description: meta.insights.description,
-  openGraph: { title: meta.insights.title, images: ["/og/insights.png"] },
+  openGraph: { title: meta.insights.title },
   alternates: { canonical: "/insights" },
 };
 

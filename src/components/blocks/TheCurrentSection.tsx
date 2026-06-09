@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { CurrentOrbital } from "@/components/blocks/CurrentOrbital";
 import { GlowCard } from "@/components/fx/GlowCard";
 import { EASE_OUT, DUR } from "@/lib/motion";
@@ -33,6 +33,21 @@ export function TheCurrentSection() {
   const pause = () => setEngaged(true);
   const resume = () => setEngaged(false);
 
+  // Explicit controls (arrow buttons, swipe) pause auto-cycle, then resume after idle.
+  const resumeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const pauseThenResume = () => {
+    setEngaged(true);
+    clearTimeout(resumeTimer.current);
+    resumeTimer.current = setTimeout(() => setEngaged(false), 6000);
+  };
+  useEffect(() => () => clearTimeout(resumeTimer.current), []);
+
+  // Step by ±1 with wrap-around (matches the looping orbital + auto-cycle).
+  const step = (dir: number) => {
+    setActive((i) => (i + dir + nodes.length) % nodes.length);
+    pauseThenResume();
+  };
+
   // Arrow-key ARIA tablist roving pattern
   const onRailKey = (e: React.KeyboardEvent) => {
     const last = nodes.length - 1;
@@ -47,6 +62,24 @@ export function TheCurrentSection() {
     const tabs = railRef.current?.querySelectorAll<HTMLButtonElement>("[role=tab]");
     tabs?.[next]?.focus();
   };
+
+  // Touch swipe (mobile): horizontal swipe advances/rewinds; ignores vertical scroll.
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const onTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY };
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStart.current) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStart.current.x;
+    const dy = t.clientY - touchStart.current.y;
+    touchStart.current = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) step(dx < 0 ? 1 : -1);
+  };
+
+  const arrowBtn =
+    "grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/15 bg-white/[0.03] text-mist/70 transition-colors duration-200 hover:border-energy/50 hover:text-energy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-energy focus-visible:ring-offset-2 focus-visible:ring-offset-ink";
 
   return (
     <section className="relative overflow-hidden bg-ink py-24 text-mist lg:py-0">
@@ -78,6 +111,8 @@ export function TheCurrentSection() {
           onMouseLeave={resume}
           onFocusCapture={pause}
           onBlurCapture={resume}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
         >
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-energy">
             {home.hero.diagram.eyebrow}
@@ -123,6 +158,19 @@ export function TheCurrentSection() {
                 </div>
               );
             })}
+          </div>
+
+          {/* Prev / next controls — click, plus swipe & arrow-keys elsewhere */}
+          <div className="mt-4 flex items-center gap-3">
+            <button type="button" aria-label="Previous step" onClick={() => step(-1)} className={arrowBtn}>
+              <ChevronLeft className="h-4 w-4" aria-hidden />
+            </button>
+            <span className="text-xs font-semibold tabular-nums tracking-[0.18em] text-mist/45" aria-hidden>
+              {String(active + 1).padStart(2, "0")} / {String(nodes.length).padStart(2, "0")}
+            </span>
+            <button type="button" aria-label="Next step" onClick={() => step(1)} className={arrowBtn}>
+              <ChevronRight className="h-4 w-4" aria-hidden />
+            </button>
           </div>
 
           {/* Description — GlowCard with crossfade */}

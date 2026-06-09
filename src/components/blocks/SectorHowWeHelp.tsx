@@ -7,7 +7,7 @@ import { ui } from "@/content";
 type HelpRow = { challenge: string; capability: string; outcome: string };
 
 const COLUMN_LABELS = ui.sectorDetailSections.helpCols;
-const COLUMN_COLORS = ["text-amber", "text-energy", "text-cyan"] as const;
+const COLUMN_COLORS = ["text-amber", "text-accent-ink", "text-accent-2-ink"] as const;
 const COLUMN_BORDERS = ["border-amber/30", "border-energy/30", "border-cyan/30"] as const;
 const COLUMN_BG = ["bg-amber/5", "bg-energy/5", "bg-cyan/5"] as const;
 
@@ -28,28 +28,28 @@ export function SectorHowWeHelp({ rows, accent }: { rows: HelpRow[]; accent: str
           {/* connecting arrow between items */}
           {i < rows.length - 1 && (
             <div
-              className="pointer-events-none absolute -bottom-3 left-6 h-6 w-px bg-gradient-to-b from-white/10 to-transparent"
+              className="pointer-events-none absolute -bottom-3 left-6 h-6 w-px bg-gradient-to-b from-hairline to-transparent"
               aria-hidden
             />
           )}
-          <div className="grid grid-cols-1 gap-0 overflow-hidden rounded-2xl border border-white/10 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-0 overflow-hidden rounded-2xl border border-hairline md:grid-cols-3">
             {/* Challenge */}
-            <div className={`p-5 ${COLUMN_BG[0]} border-b border-white/10 md:border-b-0 md:border-r`}>
+            <div className={`p-5 ${COLUMN_BG[0]} border-b border-hairline md:border-b-0 md:border-r`}>
               <p
                 className={`mb-2 text-[0.65rem] font-semibold uppercase tracking-[0.2em] ${COLUMN_COLORS[0]}`}
               >
                 {COLUMN_LABELS[0]}
               </p>
-              <p className="text-sm leading-relaxed text-mist/80">{row.challenge}</p>
+              <p className="text-sm leading-relaxed text-content-muted">{row.challenge}</p>
             </div>
             {/* Capability */}
-            <div className={`p-5 ${COLUMN_BG[1]} border-b border-white/10 md:border-b-0 md:border-r`}>
+            <div className={`p-5 ${COLUMN_BG[1]} border-b border-hairline md:border-b-0 md:border-r`}>
               <p
                 className={`mb-2 text-[0.65rem] font-semibold uppercase tracking-[0.2em] ${COLUMN_COLORS[1]}`}
               >
                 {COLUMN_LABELS[1]}
               </p>
-              <p className="text-sm leading-relaxed text-mist/80">{row.capability}</p>
+              <p className="text-sm leading-relaxed text-content-muted">{row.capability}</p>
             </div>
             {/* Outcome */}
             <div className={`p-5 ${COLUMN_BG[2]}`}>
@@ -58,7 +58,7 @@ export function SectorHowWeHelp({ rows, accent }: { rows: HelpRow[]; accent: str
               >
                 {COLUMN_LABELS[2]}
               </p>
-              <p className="text-sm leading-relaxed text-mist/80">{row.outcome}</p>
+              <p className="text-sm leading-relaxed text-content-muted">{row.outcome}</p>
             </div>
           </div>
         </motion.div>

@@ -2,8 +2,7 @@
 
 /**
  * WwdEngagementCard — styled engagement model card with GlowCard border.
- * Each card has a left accent bar, title, description, and an optional
- * visual indicator pill showing the engagement type.
+ * Uses semantic tokens so it renders correctly in both light and dark themes.
  */
 
 import { GlowCard } from "@/components/fx/GlowCard";
@@ -11,11 +10,10 @@ import { Reveal } from "@/components/fx/Reveal";
 
 const MODEL_ICONS = ["◈", "◉", "◎", "⬡"] as const;
 
-// Cycle through green→cyan palette for card accent bars
 const MODEL_ACCENTS = [
-  { bar: "#18E27B", pill: "bg-energy/15 text-energy" },
-  { bar: "#5DFFA8", pill: "bg-energy-bright/15 text-energy-bright" },
-  { bar: "#1FE3CF", pill: "bg-cyan/15 text-cyan" },
+  { bar: "#18E27B", pill: "bg-energy/15 text-accent-ink" },
+  { bar: "#5DFFA8", pill: "bg-energy-bright/15 text-accent-ink" },
+  { bar: "#1FE3CF", pill: "bg-cyan/15 text-accent-2-ink" },
   { bar: "#F2C24E", pill: "bg-amber/15 text-amber" },
 ] as const;
 
@@ -53,8 +51,8 @@ export function WwdEngagementCard({
           </span>
         </span>
 
-        <h3 className="text-base font-semibold text-mist leading-snug">{model.title}</h3>
-        <p className="mt-3 text-sm leading-relaxed text-mist/65">{model.desc}</p>
+        <h3 className="text-base font-semibold text-content leading-snug">{model.title}</h3>
+        <p className="mt-3 text-sm leading-relaxed text-content-muted">{model.desc}</p>
 
         {/* Bottom line accent */}
         <span

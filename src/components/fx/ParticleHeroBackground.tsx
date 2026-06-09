@@ -54,9 +54,9 @@ const randomRange = (min: number, max: number) => Math.random() * (max - min) + 
 // Mostly soft white with occasional brand green / cyan accents.
 const pickColor = () => {
   const r = Math.random();
-  if (r > 0.88) return "#38BDF8"; // cyan
-  if (r > 0.66) return "#10B981"; // energy bright
-  return "#F5F7F5"; // mist
+  if (r > 0.88) return "#1FE3CF"; // cyan
+  if (r > 0.66) return "#5DFFA8"; // energy bright
+  return "#E9F1EB"; // mist
 };
 
 export function ParticleHeroBackground({ className = "" }: { className?: string }) {
@@ -132,15 +132,15 @@ export function ParticleHeroBackground({ className = "" }: { className?: string 
     const cy = h * 0.42;
     const pulse = Math.sin(time * 0.0007) * 0.03 + 0.1;
     const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(w, h) * 0.75);
-    glow.addColorStop(0, `rgba(16,185,129,${pulse})`);
-    glow.addColorStop(0.4, "rgba(56,189,248,0.05)");
-    glow.addColorStop(1, "rgba(10,15,13,0)");
+    glow.addColorStop(0, `rgba(24,226,123,${pulse})`);
+    glow.addColorStop(0.4, "rgba(31,227,207,0.05)");
+    glow.addColorStop(1, "rgba(6,10,9,0)");
     ctx.fillStyle = glow;
     ctx.fillRect(0, 0, w, h);
 
     // Ambient drifting dust.
     const dust = dustRef.current;
-    ctx.fillStyle = "#F5F7F5";
+    ctx.fillStyle = "#E9F1EB";
     for (const d of dust) {
       d.x += d.vx;
       d.y += d.vy;
@@ -239,6 +239,7 @@ export function ParticleHeroBackground({ className = "" }: { className?: string 
     <div
       ref={containerRef}
       className={`absolute inset-0 overflow-hidden bg-ink ${className}`}
+      style={{ WebkitMaskImage: "linear-gradient(to bottom, #000 72%, transparent)", maskImage: "linear-gradient(to bottom, #000 72%, transparent)" }}
       onPointerMove={(event) => {
         const rect = event.currentTarget.getBoundingClientRect();
         mouseRef.current = { x: event.clientX - rect.left, y: event.clientY - rect.top, active: true };
@@ -248,7 +249,7 @@ export function ParticleHeroBackground({ className = "" }: { className?: string 
       }}
       aria-hidden
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_18%,rgba(22,163,74,0.18),transparent_36%),radial-gradient(circle_at_74%_26%,rgba(56,189,248,0.13),transparent_38%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_18%,rgba(24,226,123,0.18),transparent_36%),radial-gradient(circle_at_74%_26%,rgba(31,227,207,0.13),transparent_38%)]" />
       <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full" />
     </div>
   );

@@ -17,7 +17,7 @@ export function PersonGlowCard({ person }: { person: Person }) {
           <Image src={person.avatar} alt={person.name} fill className="object-cover object-top" sizes="(max-width:1024px) 100vw, 33vw" />
         ) : (
           <div className="absolute inset-0 grid place-items-center bg-[radial-gradient(120%_90%_at_50%_0%,rgba(16,185,129,0.32),transparent_60%),radial-gradient(120%_90%_at_50%_100%,rgba(56,189,248,0.22),transparent_55%)]">
-            <span className="text-7xl font-bold tracking-[0.2em] text-white/85">{person.initials}</span>
+            <span className="text-7xl font-bold tracking-[0.2em] text-ink/90">{person.initials}</span>
           </div>
         )}
 

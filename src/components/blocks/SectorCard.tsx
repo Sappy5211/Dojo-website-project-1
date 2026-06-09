@@ -6,7 +6,7 @@ import { Sector, ui } from "@/content";
 import { DUR, EASE_OUT } from "@/lib/motion";
 import { Reveal } from "../fx/Reveal";
 
-export function SectorCard({ sector, light = false }: { sector: Sector; light?: boolean }) {
+export function SectorCard({ sector, light: _light = false }: { sector: Sector; light?: boolean }) {
   const reduce = useReducedMotion();
 
   return (
@@ -14,7 +14,7 @@ export function SectorCard({ sector, light = false }: { sector: Sector; light?: 
       <Link
         href={`/sectors/${sector.slug}`}
         aria-label={`Explore ${sector.name}`}
-        className="motion-stable group relative block overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-ink focus-visible:ring-energy"
+        className="motion-stable group relative block overflow-hidden rounded-2xl border border-hairline bg-panel p-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-surface focus-visible:ring-energy"
       >
         {/* accent bar top */}
         <span
@@ -24,10 +24,10 @@ export function SectorCard({ sector, light = false }: { sector: Sector; light?: 
         />
 
         {/* name */}
-        <h3 className="text-lg font-semibold text-mist">{sector.name}</h3>
+        <h3 className="text-lg font-semibold text-content">{sector.name}</h3>
 
         {/* statement */}
-        <p className="mt-3 text-sm leading-relaxed text-mist/65">{sector.hero.statement}</p>
+        <p className="mt-3 text-sm leading-relaxed text-content-muted">{sector.hero.statement}</p>
 
         {/* explore link */}
         <span
@@ -37,7 +37,7 @@ export function SectorCard({ sector, light = false }: { sector: Sector; light?: 
           {ui.labels.explore}
         </span>
 
-        {/* "branch line" hover animation — the current branching into sector pathways */}
+        {/* "branch line" hover animation */}
         {!reduce && (
           <motion.span
             initial={{ scaleX: 0, opacity: 0 }}

@@ -17,11 +17,11 @@ import type { Feature, FeatureCollection } from "geojson";
 
 type Dot = { lng: number; lat: number };
 
-const OCEAN = "#0A0F0D";
-const RIM = "rgba(56,189,248,0.55)"; // cyan rim
-const GRATICULE = "rgba(245,247,245,0.14)";
-const LAND_OUTLINE = "rgba(245,247,245,0.28)";
-const DOT = "rgba(16,185,129,0.85)"; // energy green
+const OCEAN = "#060A09";
+const RIM = "rgba(31,227,207,0.55)"; // cyan rim
+const GRATICULE = "rgba(233,241,235,0.14)";
+const LAND_OUTLINE = "rgba(233,241,235,0.28)";
+const DOT = "rgba(24,226,123,0.85)"; // energy green
 
 function pointInPolygon(point: [number, number], polygon: number[][]): boolean {
   const [x, y] = point;
@@ -231,7 +231,7 @@ export function RotatingEarth({ className = "" }: { className?: string }) {
 
   return (
     <div ref={wrapRef} className={`relative mx-auto aspect-square w-full max-w-[34rem] ${className}`}>
-      <div className="pointer-events-none absolute inset-[6%] rounded-full bg-[radial-gradient(circle,rgba(16,185,129,0.12),transparent_70%)] blur-2xl" aria-hidden />
+      <div className="pointer-events-none absolute inset-[6%] rounded-full bg-[radial-gradient(circle,rgba(24,226,123,0.12),transparent_70%)] blur-2xl" aria-hidden />
       <canvas ref={canvasRef} className="relative cursor-grab touch-none active:cursor-grabbing" aria-hidden />
       <p className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.25em] text-mist/35">
         Drag to rotate
