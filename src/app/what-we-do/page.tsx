@@ -138,7 +138,7 @@ export default function WhatWeDoPage() {
           <div className="relative">
             {/* Horizontal connector line (desktop) */}
             <div
-              className="pointer-events-none absolute left-[4%] right-[4%] top-[2.25rem] hidden h-px md:block"
+              className="pointer-events-none absolute left-[4%] right-[4%] top-[2.25rem] hidden h-px lg:block"
               style={{
                 background:
                   "linear-gradient(to right, rgba(24,226,123,0.12), rgba(24,226,123,0.35) 30%, rgba(31,227,207,0.35) 70%, rgba(31,227,207,0.12))",
@@ -146,7 +146,7 @@ export default function WhatWeDoPage() {
               aria-hidden
             />
 
-            <div className="grid gap-6 md:grid-cols-5">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
               {whatWeDo.method.map((step, index) => (
                 <Reveal key={step.id} delay={index * 0.08}>
                   <article className="relative rounded-2xl border border-ink-soft/10 bg-white p-6 text-ink-soft shadow-sm">

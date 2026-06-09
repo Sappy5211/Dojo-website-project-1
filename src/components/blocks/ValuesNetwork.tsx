@@ -26,7 +26,7 @@ export function ValuesNetwork({ values }: { values: Value[] }) {
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-energy">{ui.values.eyebrow}</p>
           <h2 className="text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.1] tracking-tight">{ui.values.title}</h2>
         </div>
-        <div className="grid gap-4 rounded-3xl border border-white/10 bg-white/[0.03] p-4 md:hidden">
+        <div className="grid gap-4 rounded-3xl border border-white/10 bg-white/[0.03] p-4 sm:grid-cols-2 lg:hidden">
           {values.map((value) => (
             <article key={value.id} className="rounded-2xl border border-white/10 bg-ink/80 p-5">
               <div className="mb-4 grid h-11 w-11 place-items-center rounded-2xl bg-energy/10 text-energy">
@@ -37,7 +37,7 @@ export function ValuesNetwork({ values }: { values: Value[] }) {
             </article>
           ))}
         </div>
-        <div className="relative hidden min-h-[42rem] overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-4 md:block">
+        <div className="relative hidden min-h-[42rem] overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-4 lg:block">
           <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
             <defs>
               <linearGradient id="values-grad" x1="0" y1="0" x2="1" y2="1">

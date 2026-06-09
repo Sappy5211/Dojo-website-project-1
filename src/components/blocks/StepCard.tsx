@@ -25,7 +25,7 @@ export function StepCard({
       {/* Connector line — shown between cards (not on last, handled by parent grid gap) */}
       <div
         className={cn(
-          "pointer-events-none absolute right-0 top-1/2 hidden -translate-y-1/2 translate-x-full md:block",
+          "pointer-events-none absolute right-0 top-1/2 hidden -translate-y-1/2 translate-x-full lg:block",
           "w-6 border-t border-dashed",
           light ? "border-ink-soft/20" : "border-energy/20"
         )}

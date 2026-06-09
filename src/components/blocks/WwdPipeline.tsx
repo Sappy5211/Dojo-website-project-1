@@ -47,7 +47,7 @@ interface WwdPipelineProps {
 export function WwdPipeline({ layers, intro, eyebrow, title }: WwdPipelineProps) {
   const id = useId().replace(/:/g, "");
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-120px" });
+  const inView = useInView(ref, { once: true, margin: "-40px" });
   const reduce = useReducedMotion();
 
   const drawn = reduce ? 1 : inView ? 1 : 0;

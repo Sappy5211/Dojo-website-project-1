@@ -8,12 +8,12 @@ export function ResponsibilityMap({ people, responsibilities }: { people: Person
   return (
     <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:p-10">
       {/* Desktop: computed-position hub-and-spoke */}
-      <div className="hidden md:block">
+      <div className="hidden lg:block">
         <DesktopMap people={people} responsibilities={responsibilities} />
       </div>
 
       {/* Mobile: stacked fallback */}
-      <div className="space-y-3 md:hidden">
+      <div className="grid gap-3 sm:grid-cols-2 lg:hidden">
         {people.map((person) => (
           <div key={person.slug} className="rounded-2xl border border-white/10 bg-white/5 p-4">
             <p className="font-semibold text-mist">{person.name}</p>
