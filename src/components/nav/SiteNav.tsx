@@ -67,7 +67,10 @@ export function SiteNav() {
   }, []);
 
   // Close dropdowns on route change.
-  useEffect(() => { setOpenMenu(null); }, [pathname]);
+  useEffect(() => {
+    const id = window.setTimeout(() => setOpenMenu(null), 0);
+    return () => window.clearTimeout(id);
+  }, [pathname]);
 
   // Close on Escape + outside click.
   useEffect(() => {

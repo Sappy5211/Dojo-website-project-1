@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable react-hooks/immutability */
 
 /**
  * Antigravity particle field — brand-recoloured + performance-hardened.

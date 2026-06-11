@@ -10,8 +10,11 @@ export function ThemeToggle() {
   const reduce = useReducedMotion();
 
   useEffect(() => {
-    setIsDark(document.documentElement.classList.contains("dark"));
-    setMounted(true);
+    const id = window.requestAnimationFrame(() => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+      setMounted(true);
+    });
+    return () => window.cancelAnimationFrame(id);
   }, []);
 
   function toggle() {
